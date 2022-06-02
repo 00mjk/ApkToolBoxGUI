@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BruteForceFuture.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.file.password.recovery.bruteforce</a> &gt; <span class="el_source">BruteForceFuture.java</span></div><h1>BruteForceFuture.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.file.password.recovery.bruteforce;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+/**
+ * A {@code Future} represents the result of an asynchronous
+ * computation.  Methods are provided to check if the computation is
+ * complete, to wait for its completion, and to retrieve the result of
+ * the computation.  The result can only be retrieved using method
+ * {@code get} when the computation has completed, blocking if
+ * necessary until it is ready.  Cancellation is performed by the
+ * {@code cancel} method.  Additional methods are provided to
+ * determine if the task completed normally or was cancelled. Once a
+ * computation has completed, the computation cannot be cancelled.
+ * If you would like to use a {@code Future} for the sake
+ * of cancellability but not provide a usable result, you can
+ * declare types of the form {@code Future&lt;?&gt;} and
+ * return {@code null} as a result of the underlying task.
+ **/
+// If you want to know the Future class, refer to site; https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html
+
+// Complete this class using a lock and the condition variable
+public class BruteForceFuture implements Future&lt;String&gt; {
+<span class="nc" id="L34">    private final Logger logger = LogManager.getLogger(this.getClass().getSimpleName());</span>
+<span class="nc" id="L35">    private String result = null;</span>
+<span class="nc" id="L36">    private AtomicInteger finishedTaskCount = new AtomicInteger(0);</span>
+    private int taskCount;
+<span class="nc" id="L38">    private final Lock lock = new ReentrantLock();</span>
+<span class="nc" id="L39">    private final Condition resultSet = lock.newCondition(); // refer to Condition and Lock class in javadoc</span>
+
+<span class="nc" id="L41">    public BruteForceFuture(int taskCount) {</span>
+<span class="nc" id="L42">        this.taskCount = taskCount;</span>
+<span class="nc" id="L43">    }</span>
+
+    /*  ### set ###
+     *  set the result and send signal to thread waiting for the result
+     */
+    public void set(String result) {
+<span class="nc" id="L49">        lock.lock();</span>
+        try {
+<span class="nc bnc" id="L51" title="All 4 branches missed.">            if (result != null || finishedTaskCount.incrementAndGet() &gt;= taskCount) {</span>
+<span class="nc" id="L52">                this.result = result;</span>
+<span class="nc" id="L53">                resultSet.signal();</span>
+            }
+        } finally {
+<span class="nc" id="L56">            lock.unlock();</span>
+        }
+<span class="nc" id="L58">    }</span>
+
+    /*  ### get ###
+     *  if result is ready, return it.
+     *  if not, wait on the conditional variable.
+     */
+    @Override
+    public String get() {
+<span class="nc" id="L66">        lock.lock();</span>
+        try {
+<span class="nc" id="L68">            resultSet.await();</span>
+<span class="nc" id="L69">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L70">            logger.error(&quot;get InterruptedException&quot;);</span>
+<span class="nc" id="L71">            Thread.currentThread().interrupt();</span>
+        } finally {
+<span class="nc" id="L73">            lock.unlock();</span>
+        }
+<span class="nc" id="L75">        return result;</span>
+    }
+
+    /*  ### isDone ###
+     *  returns true if result is set
+     */
+    @Override
+    public boolean isDone() {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        return result != null;</span>
+    }
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+<span class="nc" id="L88">        return false;</span>
+    }
+
+    @Override
+    public boolean isCancelled() {
+<span class="nc" id="L93">        return false;</span>
+    }
+
+    @Override
+    public String get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        // no need to implement this. We don't use this...
+<span class="nc" id="L99">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

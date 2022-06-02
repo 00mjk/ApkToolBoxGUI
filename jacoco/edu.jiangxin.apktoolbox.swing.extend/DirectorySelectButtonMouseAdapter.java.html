@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirectorySelectButtonMouseAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.swing.extend</a> &gt; <span class="el_source">DirectorySelectButtonMouseAdapter.java</span></div><h1>DirectorySelectButtonMouseAdapter.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.swing.extend;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+
+public class DirectorySelectButtonMouseAdapter extends MouseAdapter {
+    private Logger logger;
+    private String dialogTitle;
+    private JTextField pathTextField;
+
+    public DirectorySelectButtonMouseAdapter(String dialogTitle, JTextField pathTextField) {
+<span class="nc" id="L18">        super();</span>
+<span class="nc" id="L19">        logger = LogManager.getLogger(this.getClass().getSimpleName());</span>
+<span class="nc" id="L20">        this.dialogTitle = dialogTitle;</span>
+<span class="nc" id="L21">        this.pathTextField = pathTextField;</span>
+<span class="nc" id="L22">    }</span>
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+<span class="nc" id="L26">        super.mousePressed(e);</span>
+<span class="nc" id="L27">        JFileChooser jfc = new JFileChooser();</span>
+<span class="nc" id="L28">        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);</span>
+<span class="nc" id="L29">        jfc.setDialogTitle(dialogTitle);</span>
+<span class="nc" id="L30">        int ret = jfc.showDialog(new JLabel(), null);</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        switch (ret) {</span>
+            case JFileChooser.APPROVE_OPTION:
+<span class="nc" id="L33">                File file = jfc.getSelectedFile();</span>
+                try {
+<span class="nc" id="L35">                    String path = file.getCanonicalPath();</span>
+<span class="nc" id="L36">                    pathTextField.setText(path);</span>
+<span class="nc" id="L37">                } catch (IOException ex) {</span>
+<span class="nc" id="L38">                    logger.error(&quot;getCanonicalPath failed: IOException&quot;);</span>
+<span class="nc" id="L39">                }</span>
+<span class="nc" id="L40">                break;</span>
+            default:
+                break;
+        }
+<span class="nc" id="L44">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,182 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.zhconvert,ZhConvertPanel,460,0,6,0,95,0,10,0,7,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.zhconvert,ZhConvertPanel.ConvertBtnActionListener,146,0,4,0,26,0,5,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.zhconvert,ZhConvertPanel.SaveBtnActionListener,50,0,4,0,10,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.zhconvert,ZHConverterUtils,186,0,14,0,55,0,14,0,7,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel.LockPositionAction,11,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel.RecordColorAction,64,0,4,0,12,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel,839,0,25,0,170,0,32,0,18,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorTableConstant,3430,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorConvertPanel.ColorDefaultTableModel,10,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel.ColorMode,27,0,0,0,2,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel.new TimerTask() {...},10,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorConvertPanel,992,0,2,0,180,0,14,0,13,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorUtils,3,139,0,0,1,14,1,4,1,4
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorPickerPanel.UnlockPositionAction,11,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.color,ColorConvertPanel.ColorTableCellRenderer,27,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.checksum,CheckDigestPanel,487,0,30,0,122,0,30,0,13,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.checksum,CheckDigestPanel.Hash,60,0,0,0,8,0,4,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,Utils,420,0,44,0,128,0,36,0,14,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,FileUtilsEx,120,0,12,0,25,0,10,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,KeyVerify,46,0,4,0,19,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,ProcessLogOutputStream,17,0,0,0,6,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,Utils.new DefaultExecuteResultHandler() {...},21,0,0,0,5,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,NoLogOutputStream,4,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.utils,Constants,3,0,0,0,1,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.config,ConfigPanel.new MouseAdapter() {...},53,0,2,0,12,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.config,ConfigPanel.new MouseAdapter() {...},38,0,0,0,10,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.config,ConfigPanel,222,0,0,0,47,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.help,OpenWebsiteListener,32,0,0,0,12,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.help,LookAndFeelPanel,203,0,10,0,44,0,11,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.help,CheckUpdateActionListener,170,0,10,0,63,0,11,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.help,LookAndFeelPanel.ApplyButtonMouseAdapter,53,0,2,0,15,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.help,AboutPanel,115,0,6,0,32,0,4,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.zh2unicode,Zh2UnicodeConvertPanel,348,0,10,0,75,0,14,0,9,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.relationship,ButtonListener,287,0,46,0,64,0,26,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.relationship,RelationShipConvertPanel,704,0,2,0,140,0,5,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.relationship,Constants,3,0,0,0,1,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.base,BaseConvertPanel.TextFieldDocumentListener,17,0,0,0,6,0,4,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.base,BaseConvertPanel.ClearButtonActionListener,59,0,0,0,9,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.base,BaseConvertPanel,732,0,54,0,167,0,38,0,11,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,AlarmTreeTableDataNode,48,0,2,0,17,0,9,0,8,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,AlarmBatch,145,0,12,0,37,0,17,0,11,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,AlarmTreeTableDataModel,103,0,6,0,19,0,15,0,10,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,DumpsysAlarmPanel,875,0,32,0,183,0,30,0,14,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,Alarm,125,0,11,0,33,0,18,0,11,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,DumpsysAlarmPanel.LoadFromDeviceButtonMouseAdapter,16,0,0,0,5,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,DumpsysAlarmPanel.LoadFromFileButtonMouseAdapter,16,0,0,0,5,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.dumpsys.alarm,SharedData,32,0,2,0,13,0,9,0,8,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,OsConvertPanel.ConvertButtonMouseAdapter,88,0,4,0,16,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,BatchRenamePanel.StartButtonMouseAdapter,117,0,12,0,28,0,8,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,OsConvertPanel,226,0,4,0,50,0,9,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,BatchRenamePanel,1275,0,22,0,271,0,21,0,10,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,EncodeConvertPanel.ConvertButtonMouseAdapter,147,0,8,0,28,0,6,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file,EncodeConvertPanel,300,0,4,0,58,0,8,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.dictionary,FileHandle,91,0,12,0,26,0,12,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.dictionary,BigFileReader,282,0,18,0,74,0,18,0,9,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.dictionary,BigFileReader.Builder,59,0,2,0,16,0,6,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.dictionary,BigFileReader.SliceReaderTask,140,0,12,0,28,0,8,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.dictionary,BigFileReader.StartEndPair,75,0,10,0,18,0,8,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,BinaryOfficeChecker,125,0,6,0,32,0,9,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,FileChecker,23,0,0,0,9,0,5,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,RarUsingRarChecker,93,0,2,0,25,0,7,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,XmlBasedOfficeChecker,67,0,0,0,19,0,6,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,RarChecker,62,0,2,0,23,0,8,0,7,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,PdfChecker,40,0,2,0,16,0,7,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,ZipChecker,55,0,4,0,17,0,8,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,ArchiveUsing7ZipChecker,117,0,2,0,25,0,7,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,RarChecker.new OutputStream() {...},7,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,SevenZipChecker,65,0,4,0,21,0,8,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.checker,ArchiveUsingWinRarChecker,155,0,2,0,26,0,8,0,7,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,EasyFrame.new WindowAdapter() {...},41,0,0,0,11,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,AutoCompleter,137,0,22,0,37,0,17,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.RemoveSelectedButtonMouseAdapter,32,0,2,0,7,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,NumberPlainDocument,58,0,10,0,13,0,7,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,ScrollBasicComboBoxUI.new BasicComboPopup() {...},15,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,ScrollBasicComboBoxUI,12,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.SelectAllButtonMouseAdapter,37,0,2,0,8,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FilePanel.FileTransferHandler,65,0,6,0,17,0,6,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.AddFileButtonMouseAdapter,37,0,2,0,10,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel,287,0,6,0,56,0,9,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,AutoCompleteComboBox,79,0,4,0,26,0,11,0,9,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FilePanel,118,0,0,0,29,0,5,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FilePanel.OpenDictionaryFileActionListener,75,0,4,0,13,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.ClearButtonMouseAdapter,14,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.FileListTransferHandler,64,0,6,0,16,0,6,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,DirectorySelectButtonMouseAdapter,56,0,2,0,19,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.InverseSelectedButtonMouseAdapter,54,0,4,0,9,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,EasyPanel,30,0,0,0,9,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,FileListPanel.AddDirectoryButtonMouseAdapter,37,0,2,0,10,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.extend,EasyFrame,103,0,4,0,27,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery,RecoveryPanel.CATEGORY,27,0,0,0,5,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery,RecoveryPanel,1279,0,82,0,297,0,70,0,26,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel,1247,0,26,0,253,0,24,0,11,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.Dialog2,88,0,0,0,17,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.Dialog2.new ActionListener() {...},14,0,0,0,3,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ActionListener() {...},30,0,0,0,7,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ActionListener() {...},52,0,0,0,11,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ActionListener() {...},37,0,4,0,7,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ItemListener() {...},20,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ItemListener() {...},20,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ItemListener() {...},20,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ItemListener() {...},20,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ActionListener() {...},41,0,2,0,8,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.new ActionListener() {...},31,0,2,0,7,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.CountdownRunnable,447,0,18,0,81,0,13,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.monkey,MonkeyPanel.ExcuteButtonActionListener,369,0,34,0,60,0,19,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableCellRenderer,68,0,8,0,19,0,9,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTable,54,0,0,0,11,0,1,0,1,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableSelectionModel,13,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableSelectionModel.new ListSelectionListener() {...},7,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableModelAdapter.new TreeExpansionListener() {...},14,0,0,0,5,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableModelAdapter,66,0,0,0,15,0,9,0,9,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyAbstractTreeTableModel,134,0,11,0,34,0,19,0,12,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.swing.treetable,MyTreeTableCellEditor,57,0,2,0,13,0,5,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.exception,UnknownException,7,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.exception,UnsupportedVersionException,7,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.time,DateTransform,120,0,4,0,40,0,8,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.time,TimeConvertPanel.Convert2ButtonActionListener,42,0,4,0,10,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.time,TimeConvertPanel,919,0,4,0,196,0,18,0,16,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.convert.time,TimeConvertPanel.Convert1ButtonActionListener,42,0,4,0,10,0,4,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.bruteforce,BruteForceTask,230,0,20,0,48,0,16,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.bruteforce,BruteForceTaskConst,51,0,0,0,13,0,6,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.password.recovery.bruteforce,BruteForceFuture,84,0,6,0,25,0,10,0,7,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,EncoderDetector.new Runnable() {...},14,52,2,4,5,14,2,3,0,2
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,EncoderDetector.new Runnable() {...},13,48,1,1,4,13,1,2,0,2
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,FileFilterWrapper,106,0,14,0,23,0,10,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,ClassVersionTools,62,189,8,14,24,42,9,6,1,3
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,EncoderDetector,48,108,9,7,12,23,8,4,1,3
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,OsPatternConvert,78,277,18,32,26,67,22,20,6,11
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,EncoderConvert,54,138,8,10,18,34,9,7,3,4
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.core,FileProcess,123,136,23,11,36,30,17,7,4,3
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolDecodePanel.DecodeButtonMouseAdapter,163,0,12,0,39,0,8,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,JadxActionListener,52,0,10,0,15,0,8,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolDecodePanel,297,0,10,0,60,0,11,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApkSignerPanel.ApkPathButtonMouseAdapter,39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,AxmlPrinterPanel.SrcButtonMouseAdapter,39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,AxmlPrinterPanel,232,0,10,0,48,0,10,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApkSignerPanel.RecoverButtonMouseAdapter,42,0,0,0,7,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApkSignerPanel.ApkSignButtonMouseAdapter,258,0,10,0,57,0,8,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,AxmlPrinterPanel.GetFileButtonMouseAdapter,243,0,12,0,60,0,8,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApkSignerPanel,444,0,10,0,88,0,13,0,8,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolRebuildPanel.TargetButtonMouseAdapter,49,0,2,0,13,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolRebuildPanel,279,0,10,0,57,0,11,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolRebuildPanel.RebuildButtonMouseAdapter,178,0,10,0,43,0,7,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolRebuildPanel.ApkFileFilter,16,0,0,0,4,0,3,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApkSignerPanel.KeyStorePathButtonMouseAdapter,39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolDecodePanel.SrcButtonMouseAdapter,39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,JdActionListener,55,0,10,0,16,0,8,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.reverse,ApktoolRebuildPanel.SrcButtonMouseAdapter,39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nFindLongestPanel,331,0,16,0,71,0,14,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nInfo,20,0,0,0,6,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nFindLongestPanel.new MouseAdapter() {...},39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nFindLongestPanel.new FileFilter() {...},11,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nFindLongestPanel.new Comparator() {...},12,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nFindLongestPanel.new MouseAdapter() {...},160,0,8,0,36,0,6,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nRemovePanel.new FileFilter() {...},11,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nRemovePanel.new MouseAdapter() {...},39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nRemovePanel.new MouseAdapter() {...},103,0,6,0,26,0,5,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nRemovePanel,278,0,6,0,58,0,8,0,5,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nAddPanel,694,0,36,0,164,0,29,0,11,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nAddPanel.new MouseAdapter() {...},217,0,18,0,46,0,11,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nAddPanel.new FileFilter() {...},11,0,0,0,2,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nAddPanel.new MouseAdapter() {...},39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.i18n,I18nAddPanel.new MouseAdapter() {...},39,0,2,0,11,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel,276,0,0,0,55,0,6,0,6,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel.DirectoryTextFieldTransferHandler,55,0,4,0,13,0,5,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel.GetExistButtonMouseAdapter,13,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel.new Transferable() {...},29,0,2,0,6,0,5,0,4,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel.ScreenshotButtonMouseAdapter,123,0,8,0,29,0,6,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.android.screenshot,ScreenShotPanel.DirectoryButtonMouseAdapter,50,0,2,0,12,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.main,MainFrame.new MouseAdapter() {...},19,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.main,MainFrame.ChangePanelListener,103,0,4,0,29,0,5,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.main,MainFrame,1098,0,8,0,172,0,16,0,12,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateSearchPanel.MyMenuActionListener,329,0,28,0,62,0,16,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateFilesConstants,76,0,0,0,14,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateSearchPanel.MyMouseListener,141,0,10,0,26,0,7,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateSearchPanel.OperationButtonActionListener,71,0,8,0,12,0,6,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateSearchPanel.SearchThread,99,0,10,0,25,0,8,0,3,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateFilesTableCellRenderer,28,0,0,0,4,0,2,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateFilesTableModel,17,0,2,0,5,0,3,0,2,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox.file.duplicate,DuplicateSearchPanel,603,0,16,0,126,0,16,0,8,0
+APKToolBoxGUI,edu.jiangxin.apktoolbox,Version,3,0,0,0,1,0,1,0,1,0

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RelationShipConvertPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.convert.relationship</a> &gt; <span class="el_source">RelationShipConvertPanel.java</span></div><h1>RelationShipConvertPanel.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.convert.relationship;
+
+import edu.jiangxin.apktoolbox.swing.extend.EasyPanel;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Hashtable;
+
+/*
+ * 介绍：关于“小”这个功能，在称呼存在年龄大小不同时，按钮会改变颜色，默认为比你大，点击后选择比你小。
+ * 退格功能，就是返回上一步功能还没做，也不想做了。有兴趣自己看着加。
+ * 当你能够确定关系输入过程中不存在年龄比较问题时，可以连续输入，不需要点“的”按钮。
+ * 例如直接按“兄”-&gt;“姐”-&gt;“=”就可以得到答案 【姐姐】
+ * 在这个函数initData()里面修改你的数据文件的位置。
+ * 数据文件为一行一条数据（注意使用utf-8编码）。
+ * 格式如下：[]{(父-)(母-)(兄-)(弟-)(姐-)(妹-)(夫-)(妻-)(儿-)(女-)}
+ * 存在年龄比较时&lt;称谓1&gt;&lt;称谓2&gt;，比你大的称谓在前面。
+ */
+public class RelationShipConvertPanel extends EasyPanel {
+<span class="nc" id="L26">    static Hashtable&lt;String, String&gt; dataHashtable = new Hashtable&lt;String, String&gt;();</span>
+<span class="nc" id="L27">    static String now = &quot;你&quot;;</span>
+    static JTextPane inpuTextArea;
+    static JTextArea resultTextArea;
+    static JButton olderButton;
+<span class="nc" id="L31">    static boolean isOlder = true;</span>
+
+    public RelationShipConvertPanel() {
+<span class="nc" id="L34">        super();</span>
+<span class="nc" id="L35">        setLayout(null);</span>
+<span class="nc" id="L36">        inpuTextArea = new JTextPane();</span>
+<span class="nc" id="L37">        inpuTextArea.setBounds(5, 10, 250, 50);</span>
+<span class="nc" id="L38">        inpuTextArea.setEditable(false);</span>
+<span class="nc" id="L39">        inpuTextArea.setBackground(new Color(153, 187, 170));</span>
+<span class="nc" id="L40">        inpuTextArea.setFont(new Font(&quot;微软雅黑&quot;, Font.PLAIN, 16));</span>
+<span class="nc" id="L41">        resultTextArea = new JTextArea();</span>
+<span class="nc" id="L42">        resultTextArea.setBounds(5, 61, 250, 50);</span>
+<span class="nc" id="L43">        resultTextArea.setEditable(false);</span>
+<span class="nc" id="L44">        resultTextArea.setBackground(new Color(153, 187, 170));</span>
+<span class="nc" id="L45">        resultTextArea.setFont(new Font(&quot;微软雅黑&quot;, Font.PLAIN, 35));</span>
+<span class="nc" id="L46">        resultTextArea.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);</span>
+        //******************下面是各种按钮***************************
+<span class="nc" id="L48">        ButtonListener btnListener = new ButtonListener();</span>
+        //父 按钮
+<span class="nc" id="L50">        JButton fatherButton = new JButton(&quot;父&quot;);</span>
+<span class="nc" id="L51">        fatherButton.setBounds(5, 120, 55, 55);</span>
+<span class="nc" id="L52">        fatherButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L53">        fatherButton.setForeground(Color.white);</span>
+<span class="nc" id="L54">        fatherButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L55">        fatherButton.addActionListener(btnListener);</span>
+        //母 按钮
+<span class="nc" id="L57">        JButton motherButton = new JButton(&quot;母&quot;);</span>
+<span class="nc" id="L58">        motherButton.setBounds(70, 120, 55, 55);</span>
+<span class="nc" id="L59">        motherButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L60">        motherButton.setForeground(Color.white);</span>
+<span class="nc" id="L61">        motherButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L62">        motherButton.addActionListener(btnListener);</span>
+        // 退格
+<span class="nc" id="L64">        JButton backButton = new JButton(&quot;←&quot;);</span>
+<span class="nc" id="L65">        backButton.setBounds(135, 120, 55, 55);</span>
+<span class="nc" id="L66">        backButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L67">        backButton.setForeground(Color.white);</span>
+<span class="nc" id="L68">        backButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L69">        backButton.addActionListener(btnListener);</span>
+        //清零
+<span class="nc" id="L71">        JButton acButton = new JButton(&quot;AC&quot;);</span>
+<span class="nc" id="L72">        acButton.setBounds(200, 120, 55, 55);</span>
+<span class="nc" id="L73">        acButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L74">        acButton.setForeground(Color.white);</span>
+<span class="nc" id="L75">        acButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 16));</span>
+<span class="nc" id="L76">        acButton.addActionListener(btnListener);</span>
+        //兄
+<span class="nc" id="L78">        JButton bortherButton = new JButton(&quot;兄&quot;);</span>
+<span class="nc" id="L79">        bortherButton.setBounds(5, 185, 55, 55);</span>
+<span class="nc" id="L80">        bortherButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L81">        bortherButton.setForeground(Color.white);</span>
+<span class="nc" id="L82">        bortherButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L83">        bortherButton.addActionListener(btnListener);</span>
+        //弟
+<span class="nc" id="L85">        JButton littleBortherButton = new JButton(&quot;弟&quot;);</span>
+<span class="nc" id="L86">        littleBortherButton.setBounds(70, 185, 55, 55);</span>
+<span class="nc" id="L87">        littleBortherButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L88">        littleBortherButton.setForeground(Color.white);</span>
+<span class="nc" id="L89">        littleBortherButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L90">        littleBortherButton.addActionListener(btnListener);</span>
+        //夫
+<span class="nc" id="L92">        JButton husbandButton = new JButton(&quot;夫&quot;);</span>
+<span class="nc" id="L93">        husbandButton.setBounds(135, 185, 55, 55);</span>
+<span class="nc" id="L94">        husbandButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L95">        husbandButton.setForeground(Color.white);</span>
+<span class="nc" id="L96">        husbandButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L97">        husbandButton.addActionListener(btnListener);</span>
+        //是否年长
+<span class="nc" id="L99">        olderButton = new JButton(&quot;小&quot;);</span>
+<span class="nc" id="L100">        olderButton.setBounds(200, 185, 55, 55);</span>
+<span class="nc" id="L101">        olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L102">        olderButton.setForeground(Color.white);</span>
+<span class="nc" id="L103">        olderButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L104">        olderButton.addActionListener(btnListener);</span>
+        //姐
+<span class="nc" id="L106">        JButton sisterButton = new JButton(&quot;姐&quot;);</span>
+<span class="nc" id="L107">        sisterButton.setBounds(5, 250, 55, 55);</span>
+<span class="nc" id="L108">        sisterButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L109">        sisterButton.setForeground(Color.white);</span>
+<span class="nc" id="L110">        sisterButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L111">        sisterButton.addActionListener(btnListener);</span>
+        //妹
+<span class="nc" id="L113">        JButton littleSisterButton = new JButton(&quot;妹&quot;);</span>
+<span class="nc" id="L114">        littleSisterButton.setBounds(70, 250, 55, 55);</span>
+<span class="nc" id="L115">        littleSisterButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L116">        littleSisterButton.setForeground(Color.white);</span>
+<span class="nc" id="L117">        littleSisterButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L118">        littleSisterButton.addActionListener(btnListener);</span>
+        //妻
+<span class="nc" id="L120">        JButton wifeButton = new JButton(&quot;妻&quot;);</span>
+<span class="nc" id="L121">        wifeButton.setBounds(135, 250, 55, 55);</span>
+<span class="nc" id="L122">        wifeButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L123">        wifeButton.setForeground(Color.white);</span>
+<span class="nc" id="L124">        wifeButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L125">        wifeButton.addActionListener(btnListener);</span>
+        //的
+<span class="nc" id="L127">        JButton deButton = new JButton(&quot;的&quot;);</span>
+<span class="nc" id="L128">        deButton.setBounds(200, 250, 55, 55);</span>
+<span class="nc" id="L129">        deButton.setBackground(new Color(212, 98, 2));</span>
+<span class="nc" id="L130">        deButton.setForeground(Color.white);</span>
+<span class="nc" id="L131">        deButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L132">        deButton.addActionListener(btnListener);</span>
+        //子
+<span class="nc" id="L134">        JButton sonButton = new JButton(&quot;儿&quot;);</span>
+<span class="nc" id="L135">        sonButton.setBounds(5, 315, 55, 55);</span>
+<span class="nc" id="L136">        sonButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L137">        sonButton.setForeground(Color.white);</span>
+<span class="nc" id="L138">        sonButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L139">        sonButton.addActionListener(btnListener);</span>
+        //女
+<span class="nc" id="L141">        JButton daughterbButton = new JButton(&quot;女&quot;);</span>
+<span class="nc" id="L142">        daughterbButton.setBounds(70, 315, 55, 55);</span>
+<span class="nc" id="L143">        daughterbButton.setBackground(new Color(95, 95, 95));</span>
+<span class="nc" id="L144">        daughterbButton.setForeground(Color.white);</span>
+<span class="nc" id="L145">        daughterbButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 20));</span>
+<span class="nc" id="L146">        daughterbButton.addActionListener(btnListener);</span>
+        //等于
+<span class="nc" id="L148">        JButton resultButton = new JButton(&quot;=&quot;);</span>
+<span class="nc" id="L149">        resultButton.setBounds(135, 315, 120, 55);</span>
+<span class="nc" id="L150">        resultButton.setBackground(new Color(212, 98, 2));</span>
+<span class="nc" id="L151">        resultButton.setForeground(Color.white);</span>
+<span class="nc" id="L152">        resultButton.setFont(new Font(&quot;宋体&quot;, Font.BOLD, 40));</span>
+<span class="nc" id="L153">        resultButton.addActionListener(btnListener);</span>
+        //*********************************************************
+
+<span class="nc" id="L156">        add(fatherButton);</span>
+<span class="nc" id="L157">        add(motherButton);</span>
+<span class="nc" id="L158">        add(backButton);</span>
+<span class="nc" id="L159">        add(acButton);</span>
+<span class="nc" id="L160">        add(bortherButton);</span>
+<span class="nc" id="L161">        add(littleBortherButton);</span>
+<span class="nc" id="L162">        add(husbandButton);</span>
+<span class="nc" id="L163">        add(olderButton);</span>
+<span class="nc" id="L164">        add(sisterButton);</span>
+<span class="nc" id="L165">        add(littleSisterButton);</span>
+<span class="nc" id="L166">        add(wifeButton);</span>
+<span class="nc" id="L167">        add(deButton);</span>
+<span class="nc" id="L168">        add(sonButton);</span>
+<span class="nc" id="L169">        add(daughterbButton);</span>
+<span class="nc" id="L170">        add(resultButton);</span>
+        //**以上为按钮**
+<span class="nc" id="L172">        add(inpuTextArea);</span>
+<span class="nc" id="L173">        add(resultTextArea);</span>
+<span class="nc" id="L174">        setBackground(new Color(51, 51, 51));</span>
+<span class="nc" id="L175">        initData();</span>
+<span class="nc" id="L176">    }</span>
+
+    public Dimension getPreferredSize() {
+<span class="nc" id="L179">        return new Dimension(280, 420);</span>
+    }
+
+    private void initData() {
+<span class="nc" id="L183">        BufferedReader bfReader = null;</span>
+<span class="nc" id="L184">        bfReader = new BufferedReader(new StringReader(Constants.data));</span>
+        String tempString;
+        try {
+<span class="nc" id="L187">            tempString = bfReader.readLine();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">            while (tempString.length() &gt; 3) {</span>
+<span class="nc" id="L189">                dataHashtable.put(StringUtils.substringBetween(tempString, &quot;[&quot;, &quot;]&quot;), StringUtils.substringBetween(tempString, &quot;{&quot;, &quot;}&quot;));</span>
+<span class="nc" id="L190">                tempString = bfReader.readLine();</span>
+            }
+<span class="nc" id="L192">        } catch (IOException e) {</span>
+<span class="nc" id="L193">            JOptionPane.showMessageDialog(null, &quot;数据载入失败!&quot;);</span>
+<span class="nc" id="L194">        } catch (NullPointerException e) {</span>
+<span class="nc" id="L195">            System.out.println(&quot;数据载入完成-&gt;共加载数据&quot; + dataHashtable.size() + &quot;条&quot;);</span>
+<span class="nc" id="L196">        }</span>
+
+<span class="nc" id="L198">    }</span>
+
+}
+
+<span class="nc" id="L202">class ButtonListener implements ActionListener {</span>
+    public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L204">        String which = ((JButton) e.getSource()).getText();</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        if (which.equals(&quot;AC&quot;)) {</span>
+<span class="nc" id="L206">            RelationShipConvertPanel.now = &quot;你&quot;;</span>
+<span class="nc" id="L207">            RelationShipConvertPanel.isOlder = true;</span>
+<span class="nc" id="L208">            RelationShipConvertPanel.olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L209">            RelationShipConvertPanel.inpuTextArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L210">            RelationShipConvertPanel.resultTextArea.setText(&quot;&quot;);</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        } else if (which.equals(&quot;=&quot;)) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (RelationShipConvertPanel.now.charAt(0) == '&lt;') {</span>
+<span class="nc" id="L213">                String[] oldChooseString = StringUtils.substringsBetween(RelationShipConvertPanel.now, &quot;&lt;&quot;, &quot;&gt;&quot;);</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                RelationShipConvertPanel.now = RelationShipConvertPanel.isOlder ? oldChooseString[0] : oldChooseString[1];</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                RelationShipConvertPanel.inpuTextArea.setText(RelationShipConvertPanel.inpuTextArea.getText() + (RelationShipConvertPanel.isOlder ? &quot;(比你年长)&quot; : &quot;(比你年轻)&quot;));</span>
+            }
+<span class="nc" id="L217">            RelationShipConvertPanel.olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L218">            RelationShipConvertPanel.isOlder = true;</span>
+<span class="nc" id="L219">            RelationShipConvertPanel.resultTextArea.setText(RelationShipConvertPanel.now);</span>
+            //RelationShipConvertPanel.now=&quot;你&quot;;
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        } else if (which.equals(&quot;小&quot;)) {</span>
+<span class="nc" id="L222">            RelationShipConvertPanel.isOlder = false;</span>
+<span class="nc" id="L223">            RelationShipConvertPanel.olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        } else if (which.equals(&quot;←&quot;)) {</span>
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        } else if (which.equals(&quot;的&quot;)) {</span>
+<span class="nc" id="L227">            String temp = &quot;&quot;;</span>
+<span class="nc" id="L228">            RelationShipConvertPanel.olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">            if (RelationShipConvertPanel.now.charAt(0) == '&lt;') {</span>
+<span class="nc" id="L230">                String[] oldChooseString = StringUtils.substringsBetween(RelationShipConvertPanel.now, &quot;&lt;&quot;, &quot;&gt;&quot;);</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">                RelationShipConvertPanel.now = RelationShipConvertPanel.isOlder ? oldChooseString[0] : oldChooseString[1];</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">                temp = RelationShipConvertPanel.isOlder ? &quot;(比你年长)&quot; : &quot;(比你年轻)&quot;;</span>
+            }
+<span class="nc" id="L234">            RelationShipConvertPanel.inpuTextArea.setText(RelationShipConvertPanel.inpuTextArea.getText() + temp + which);</span>
+<span class="nc" id="L235">            RelationShipConvertPanel.isOlder = true;</span>
+<span class="nc" id="L236">        } else {//按下关系按钮时</span>
+<span class="nc" id="L237">            RelationShipConvertPanel.olderButton.setBackground(new Color(217, 2, 0));</span>
+<span class="nc" id="L238">            RelationShipConvertPanel.inpuTextArea.setText(RelationShipConvertPanel.inpuTextArea.getText() + which);</span>
+<span class="nc" id="L239">            RelationShipConvertPanel.now = getNext(which).substring(2);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (RelationShipConvertPanel.now.charAt(0) == '&lt;') {</span>
+<span class="nc" id="L241">                RelationShipConvertPanel.olderButton.setBackground(new Color(212, 98, 2));</span>
+            }
+<span class="nc" id="L243">            RelationShipConvertPanel.isOlder = true;</span>
+        }
+
+<span class="nc" id="L246">    }</span>
+
+    String getNext(String what) {
+<span class="nc" id="L249">        String relationsString = RelationShipConvertPanel.dataHashtable.get(RelationShipConvertPanel.now);</span>
+<span class="nc" id="L250">        String[] relation = null;</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (relationsString != null) {</span>
+<span class="nc" id="L252">            relation = StringUtils.substringsBetween(relationsString, &quot;(&quot;, &quot;)&quot;);</span>
+        } else {
+<span class="nc" id="L254">            RelationShipConvertPanel.resultTextArea.setText(&quot;超出计算范围&quot;);</span>
+<span class="nc" id="L255">            return RelationShipConvertPanel.now;</span>
+        }
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        if (what.equals(&quot;父&quot;)) {</span>
+<span class="nc" id="L258">            return relation[0];</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        } else if (what.equals(&quot;母&quot;)) {</span>
+<span class="nc" id="L260">            return relation[1];</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        } else if (what.equals(&quot;兄&quot;)) {</span>
+<span class="nc" id="L262">            return relation[2];</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">        } else if (what.equals(&quot;弟&quot;)) {</span>
+<span class="nc" id="L264">            return relation[3];</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        } else if (what.equals(&quot;姐&quot;)) {</span>
+<span class="nc" id="L266">            return relation[4];</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        } else if (what.equals(&quot;妹&quot;)) {</span>
+<span class="nc" id="L268">            return relation[5];</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        } else if (what.equals(&quot;夫&quot;)) {</span>
+<span class="nc" id="L270">            return relation[6];</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        } else if (what.equals(&quot;妻&quot;)) {</span>
+<span class="nc" id="L272">            return relation[7];</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        } else if (what.equals(&quot;儿&quot;)) {</span>
+<span class="nc" id="L274">            return relation[8];</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        } else if (what.equals(&quot;女&quot;)) {</span>
+<span class="nc" id="L276">            return relation[9];</span>
+        } else {
+<span class="nc" id="L278">            return RelationShipConvertPanel.now;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

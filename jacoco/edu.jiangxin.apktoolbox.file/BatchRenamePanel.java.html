@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BatchRenamePanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.file</a> &gt; <span class="el_source">BatchRenamePanel.java</span></div><h1>BatchRenamePanel.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.file;
+
+import edu.jiangxin.apktoolbox.swing.extend.DirectorySelectButtonMouseAdapter;
+import edu.jiangxin.apktoolbox.swing.extend.EasyPanel;
+import edu.jiangxin.apktoolbox.utils.Constants;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
+
+//https://www.zhihu.com/question/50890909
+public class BatchRenamePanel extends EasyPanel {
+    private JPanel sourcePanel;
+
+    private JPanel targetPanel;
+
+    private JPanel rulePanel;
+
+    private JPanel hierarchyPanel;
+
+    private JPanel othersPanel;
+
+    private JPanel operationPanel;
+
+    private JPanel statusPanel;
+
+    private JTextField sourceTextField;
+    private JTextField suffixTextField;
+    private JCheckBox recursiveCheckBox;
+    private JTextField targetTextField;
+    private JRadioButton ruleRadioButton1;
+    private JRadioButton ruleRadioButton2;
+    private JRadioButton ruleRadioButton3;
+    private JRadioButton ruleRadioButton4;
+    private JRadioButton ruleRadioButton5;
+    private JRadioButton ruleRadioButton6;
+    private JRadioButton hierarchyRadioButton1;
+    private JRadioButton hierarchyRadioButton2;
+    private JRadioButton othersRadioButton1;
+    private JRadioButton othersRadioButton2;
+    private JRadioButton othersRadioButton3;
+    private JTextField textField21;
+    private JSpinner spinner21;
+    private JCheckBox checkBox31;
+    private JCheckBox checkBox32;
+    private JCheckBox checkBox33;
+    private JTextField textField31;
+    private JTextField textField32;
+    private JSpinner spinner31;
+    private JSpinner spinner32;
+    private JSpinner spinner41;
+    private JTextField textField42;
+    private JSpinner spinner51;
+    private JSpinner spinner52;
+    private JTextField textField61;
+    private JTextField textField62;
+    private JTextField currentFileTextField;
+
+    public BatchRenamePanel() throws HeadlessException {
+<span class="nc" id="L69">        super();</span>
+<span class="nc" id="L70">        initUI();</span>
+<span class="nc" id="L71">    }</span>
+
+    private void initUI() {
+<span class="nc" id="L74">        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);</span>
+<span class="nc" id="L75">        setLayout(boxLayout);</span>
+
+<span class="nc" id="L77">        createSourcePanel();</span>
+<span class="nc" id="L78">        add(sourcePanel);</span>
+<span class="nc" id="L79">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L81">        createTargetPanel();</span>
+<span class="nc" id="L82">        add(targetPanel);</span>
+<span class="nc" id="L83">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L85">        createRulePanel();</span>
+<span class="nc" id="L86">        add(rulePanel);</span>
+<span class="nc" id="L87">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L89">        createHierarchyPanel();</span>
+<span class="nc" id="L90">        add(hierarchyPanel);</span>
+<span class="nc" id="L91">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L93">        createOthersPanel();</span>
+<span class="nc" id="L94">        add(othersPanel);</span>
+<span class="nc" id="L95">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L97">        createOperationPanel();</span>
+<span class="nc" id="L98">        add(operationPanel);</span>
+<span class="nc" id="L99">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L101">        createStatusPanel();</span>
+<span class="nc" id="L102">        add(statusPanel);</span>
+<span class="nc" id="L103">    }</span>
+
+    private void createSourcePanel() {
+<span class="nc" id="L106">        sourcePanel = new JPanel();</span>
+<span class="nc" id="L107">        sourcePanel.setBorder(BorderFactory.createTitledBorder(&quot;1. 源文件&quot;));</span>
+<span class="nc" id="L108">        sourcePanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L110">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L111">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L112">        sourcePanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L114">        JPanel thirdLevelPanel1 = new JPanel();</span>
+<span class="nc" id="L115">        thirdLevelPanel1.setLayout(new BoxLayout(thirdLevelPanel1, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L117">        JPanel thirdLevelPanel2 = new JPanel();</span>
+<span class="nc" id="L118">        thirdLevelPanel2.setLayout(new BoxLayout(thirdLevelPanel2, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L120">        secondLevelPanel.add(thirdLevelPanel1);</span>
+<span class="nc" id="L121">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L122">        secondLevelPanel.add(thirdLevelPanel2);</span>
+
+<span class="nc" id="L124">        JLabel label = new JLabel(&quot;源文件所在目录：&quot;);</span>
+<span class="nc" id="L125">        sourceTextField = new JTextField();</span>
+<span class="nc" id="L126">        JButton button = new JButton(&quot;选择&quot;);</span>
+<span class="nc" id="L127">        button.addMouseListener(new DirectorySelectButtonMouseAdapter(&quot;Select a directory&quot;, sourceTextField));</span>
+<span class="nc" id="L128">        thirdLevelPanel1.add(label);</span>
+<span class="nc" id="L129">        thirdLevelPanel1.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L130">        thirdLevelPanel1.add(sourceTextField);</span>
+<span class="nc" id="L131">        thirdLevelPanel1.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L132">        thirdLevelPanel1.add(button);</span>
+
+<span class="nc" id="L134">        JLabel label2 = new JLabel(&quot;后缀：&quot;);</span>
+<span class="nc" id="L135">        suffixTextField = new JTextField();</span>
+<span class="nc" id="L136">        suffixTextField.setToolTipText(&quot;an array of extensions, ex. {\&quot;java\&quot;,\&quot;xml\&quot;}. If this parameter is empty, all files are returned.&quot;);</span>
+<span class="nc" id="L137">        recursiveCheckBox = new JCheckBox(&quot;包括子目录&quot;);</span>
+
+<span class="nc" id="L139">        thirdLevelPanel2.add(label2);</span>
+<span class="nc" id="L140">        thirdLevelPanel2.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L141">        thirdLevelPanel2.add(suffixTextField);</span>
+<span class="nc" id="L142">        thirdLevelPanel2.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L143">        thirdLevelPanel2.add(recursiveCheckBox);</span>
+<span class="nc" id="L144">    }</span>
+
+    private void createTargetPanel() {
+<span class="nc" id="L147">        targetPanel = new JPanel();</span>
+<span class="nc" id="L148">        targetPanel.setBorder(BorderFactory.createTitledBorder(&quot;2. 目标文件&quot;));</span>
+<span class="nc" id="L149">        targetPanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L151">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L152">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L153">        targetPanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L155">        JLabel label = new JLabel(&quot;存放新文件的目录：&quot;);</span>
+<span class="nc" id="L156">        targetTextField = new JTextField();</span>
+<span class="nc" id="L157">        JButton button = new JButton(&quot;选择&quot;);</span>
+<span class="nc" id="L158">        button.addMouseListener(new DirectorySelectButtonMouseAdapter(&quot;Select a directory&quot;, targetTextField));</span>
+<span class="nc" id="L159">        secondLevelPanel.add(label);</span>
+<span class="nc" id="L160">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L161">        secondLevelPanel.add(targetTextField);</span>
+<span class="nc" id="L162">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L163">        secondLevelPanel.add(button);</span>
+<span class="nc" id="L164">    }</span>
+
+    private void createRulePanel() {
+<span class="nc" id="L167">        rulePanel = new JPanel();</span>
+<span class="nc" id="L168">        rulePanel.setBorder(BorderFactory.createTitledBorder(&quot;3. 更名规则&quot;));</span>
+<span class="nc" id="L169">        rulePanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L171">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L172">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L173">        rulePanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L175">        JPanel thirdLevelPanel1 = new JPanel();</span>
+<span class="nc" id="L176">        thirdLevelPanel1.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L178">        JPanel thirdLevelPanel2 = new JPanel();</span>
+<span class="nc" id="L179">        thirdLevelPanel2.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L181">        JPanel thirdLevelPanel3 = new JPanel();</span>
+<span class="nc" id="L182">        thirdLevelPanel3.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L184">        JPanel thirdLevelPanel4 = new JPanel();</span>
+<span class="nc" id="L185">        thirdLevelPanel4.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L187">        JPanel thirdLevelPanel5 = new JPanel();</span>
+<span class="nc" id="L188">        thirdLevelPanel5.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L190">        JPanel thirdLevelPanel6 = new JPanel();</span>
+<span class="nc" id="L191">        thirdLevelPanel6.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));</span>
+
+<span class="nc" id="L193">        secondLevelPanel.add(thirdLevelPanel1);</span>
+<span class="nc" id="L194">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L195">        secondLevelPanel.add(thirdLevelPanel2);</span>
+<span class="nc" id="L196">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L197">        secondLevelPanel.add(thirdLevelPanel3);</span>
+<span class="nc" id="L198">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L199">        secondLevelPanel.add(thirdLevelPanel4);</span>
+<span class="nc" id="L200">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L201">        secondLevelPanel.add(thirdLevelPanel5);</span>
+<span class="nc" id="L202">        secondLevelPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L203">        secondLevelPanel.add(thirdLevelPanel6);</span>
+
+<span class="nc" id="L205">        ButtonGroup buttonGroup = new ButtonGroup();</span>
+
+        {
+<span class="nc" id="L208">            ruleRadioButton1 = new JRadioButton(&quot;只在文件重名时才更名&quot;);</span>
+<span class="nc" id="L209">            ruleRadioButton1.setSelected(true);</span>
+<span class="nc" id="L210">            thirdLevelPanel1.add(ruleRadioButton1);</span>
+<span class="nc" id="L211">            buttonGroup.add(ruleRadioButton1);</span>
+        }
+
+        {
+<span class="nc" id="L215">            ruleRadioButton2 = new JRadioButton(&quot;将前缀{String}后的数字改为{Int}位&quot;);</span>
+<span class="nc" id="L216">            thirdLevelPanel2.add(ruleRadioButton2);</span>
+<span class="nc" id="L217">            buttonGroup.add(ruleRadioButton2);</span>
+
+<span class="nc" id="L219">            JLabel label21 = new JLabel(&quot;String&quot;);</span>
+<span class="nc" id="L220">            textField21 = new JTextField(&quot;&quot;);</span>
+<span class="nc" id="L221">            JLabel label22 = new JLabel(&quot;Int&quot;);</span>
+<span class="nc" id="L222">            spinner21 = new JSpinner();</span>
+<span class="nc" id="L223">            spinner21.setValue(4);</span>
+<span class="nc" id="L224">            thirdLevelPanel2.add(label21);</span>
+<span class="nc" id="L225">            thirdLevelPanel2.add(textField21);</span>
+<span class="nc" id="L226">            thirdLevelPanel2.add(label22);</span>
+<span class="nc" id="L227">            thirdLevelPanel2.add(spinner21);</span>
+        }
+
+        {
+<span class="nc" id="L231">            ruleRadioButton3 = new JRadioButton(&quot;重编号所有文件&quot;);</span>
+<span class="nc" id="L232">            thirdLevelPanel3.add(ruleRadioButton3);</span>
+<span class="nc" id="L233">            buttonGroup.add(ruleRadioButton3);</span>
+
+<span class="nc" id="L235">            checkBox31 = new JCheckBox(&quot;编号先按原文件名排序&quot;);</span>
+<span class="nc" id="L236">            checkBox32 = new JCheckBox(&quot;按末尾数字排序&quot;);</span>
+<span class="nc" id="L237">            checkBox33 = new JCheckBox(&quot;用目录名为前缀&quot;);</span>
+<span class="nc" id="L238">            JLabel label31 = new JLabel(&quot;分隔字符&quot;);</span>
+<span class="nc" id="L239">            textField31 = new JTextField(&quot;_&quot;);</span>
+<span class="nc" id="L240">            JLabel label32 = new JLabel(&quot;前缀&quot;);</span>
+<span class="nc" id="L241">            textField32 = new JTextField(&quot;File&quot;);</span>
+<span class="nc" id="L242">            JLabel label33 = new JLabel(&quot;起始号码&quot;);</span>
+<span class="nc" id="L243">            spinner31 = new JSpinner();</span>
+<span class="nc" id="L244">            spinner31.setValue(1);</span>
+<span class="nc" id="L245">            JLabel label34 = new JLabel(&quot;号码位数&quot;);</span>
+<span class="nc" id="L246">            spinner32 = new JSpinner();</span>
+<span class="nc" id="L247">            spinner32.setValue(3);</span>
+<span class="nc" id="L248">            thirdLevelPanel3.add(checkBox31);</span>
+<span class="nc" id="L249">            thirdLevelPanel3.add(checkBox32);</span>
+<span class="nc" id="L250">            thirdLevelPanel3.add(checkBox33);</span>
+<span class="nc" id="L251">            thirdLevelPanel3.add(label31);</span>
+<span class="nc" id="L252">            thirdLevelPanel3.add(textField31);</span>
+<span class="nc" id="L253">            thirdLevelPanel3.add(label32);</span>
+<span class="nc" id="L254">            thirdLevelPanel3.add(textField32);</span>
+<span class="nc" id="L255">            thirdLevelPanel3.add(label33);</span>
+<span class="nc" id="L256">            thirdLevelPanel3.add(spinner31);</span>
+<span class="nc" id="L257">            thirdLevelPanel3.add(label34);</span>
+<span class="nc" id="L258">            thirdLevelPanel3.add(spinner32);</span>
+        }
+
+        {
+<span class="nc" id="L262">            ruleRadioButton4 = new JRadioButton(&quot;在第{Int}个字符后添加{String}&quot;);</span>
+<span class="nc" id="L263">            thirdLevelPanel4.add(ruleRadioButton4);</span>
+<span class="nc" id="L264">            buttonGroup.add(ruleRadioButton4);</span>
+
+<span class="nc" id="L266">            JLabel label41 = new JLabel(&quot;Int&quot;);</span>
+<span class="nc" id="L267">            spinner41 = new JSpinner();</span>
+<span class="nc" id="L268">            spinner41.setValue(0);</span>
+<span class="nc" id="L269">            JLabel label42 = new JLabel(&quot;String&quot;);</span>
+<span class="nc" id="L270">            textField42 = new JTextField(&quot;&quot;);</span>
+<span class="nc" id="L271">            thirdLevelPanel4.add(label41);</span>
+<span class="nc" id="L272">            thirdLevelPanel4.add(spinner41);</span>
+<span class="nc" id="L273">            thirdLevelPanel4.add(label42);</span>
+<span class="nc" id="L274">            thirdLevelPanel4.add(textField42);</span>
+        }
+
+        {
+<span class="nc" id="L278">            ruleRadioButton5 = new JRadioButton(&quot;删除自第{Int:1}个字符开始的{Int:2}个字符&quot;);</span>
+<span class="nc" id="L279">            thirdLevelPanel5.add(ruleRadioButton5);</span>
+<span class="nc" id="L280">            buttonGroup.add(ruleRadioButton5);</span>
+
+<span class="nc" id="L282">            JLabel label51 = new JLabel(&quot;Int:1&quot;);</span>
+<span class="nc" id="L283">            spinner51 = new JSpinner();</span>
+<span class="nc" id="L284">            spinner51.setValue(1);</span>
+<span class="nc" id="L285">            JLabel label52 = new JLabel(&quot;Int:2&quot;);</span>
+<span class="nc" id="L286">            spinner52 = new JSpinner();</span>
+<span class="nc" id="L287">            spinner52.setValue(1);</span>
+<span class="nc" id="L288">            thirdLevelPanel5.add(label51);</span>
+<span class="nc" id="L289">            thirdLevelPanel5.add(spinner51);</span>
+<span class="nc" id="L290">            thirdLevelPanel5.add(label52);</span>
+<span class="nc" id="L291">            thirdLevelPanel5.add(spinner52);</span>
+        }
+
+        {
+<span class="nc" id="L295">            ruleRadioButton6 = new JRadioButton(&quot;将文件名中出现的字符串{String:1}替换为{String:2}&quot;);</span>
+<span class="nc" id="L296">            thirdLevelPanel6.add(ruleRadioButton6);</span>
+<span class="nc" id="L297">            buttonGroup.add(ruleRadioButton6);</span>
+
+<span class="nc" id="L299">            JLabel label61 = new JLabel(&quot;String:1&quot;);</span>
+<span class="nc" id="L300">            textField61 = new JTextField(&quot;&quot;);</span>
+<span class="nc" id="L301">            JLabel label62 = new JLabel(&quot;String:2&quot;);</span>
+<span class="nc" id="L302">            textField62 = new JTextField(&quot;&quot;);</span>
+<span class="nc" id="L303">            thirdLevelPanel6.add(label61);</span>
+<span class="nc" id="L304">            thirdLevelPanel6.add(textField61);</span>
+<span class="nc" id="L305">            thirdLevelPanel6.add(label62);</span>
+<span class="nc" id="L306">            thirdLevelPanel6.add(textField62);</span>
+        }
+<span class="nc" id="L308">    }</span>
+
+    private void createHierarchyPanel() {
+<span class="nc" id="L311">        hierarchyPanel = new JPanel();</span>
+<span class="nc" id="L312">        hierarchyPanel.setBorder(BorderFactory.createTitledBorder(&quot;4. 新文件的目录结构&quot;));</span>
+<span class="nc" id="L313">        hierarchyPanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L315">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L316">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L317">        hierarchyPanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L319">        ButtonGroup buttonGroup = new ButtonGroup();</span>
+
+<span class="nc" id="L321">        hierarchyRadioButton1 = new JRadioButton(&quot;所有文件均放在同一个目录下&quot;);</span>
+<span class="nc" id="L322">        secondLevelPanel.add(hierarchyRadioButton1);</span>
+<span class="nc" id="L323">        buttonGroup.add(hierarchyRadioButton1);</span>
+
+<span class="nc" id="L325">        hierarchyRadioButton2 = new JRadioButton(&quot;保持原有目录结构&quot;);</span>
+<span class="nc" id="L326">        hierarchyRadioButton2.setSelected(true);</span>
+<span class="nc" id="L327">        secondLevelPanel.add(hierarchyRadioButton2);</span>
+<span class="nc" id="L328">        buttonGroup.add(hierarchyRadioButton2);</span>
+<span class="nc" id="L329">    }</span>
+
+    private void createOthersPanel() {
+<span class="nc" id="L332">        othersPanel = new JPanel();</span>
+<span class="nc" id="L333">        othersPanel.setBorder(BorderFactory.createTitledBorder(&quot;5. 其它&quot;));</span>
+<span class="nc" id="L334">        othersPanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L336">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L337">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L338">        othersPanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L340">        ButtonGroup buttonGroup = new ButtonGroup();</span>
+
+<span class="nc" id="L342">        othersRadioButton1 = new JRadioButton(&quot;保留源文件&quot;);</span>
+<span class="nc" id="L343">        othersRadioButton1.setSelected(true);</span>
+<span class="nc" id="L344">        secondLevelPanel.add(othersRadioButton1);</span>
+<span class="nc" id="L345">        buttonGroup.add(othersRadioButton1);</span>
+
+<span class="nc" id="L347">        othersRadioButton2 = new JRadioButton(&quot;删除源文件&quot;);</span>
+<span class="nc" id="L348">        secondLevelPanel.add(othersRadioButton2);</span>
+<span class="nc" id="L349">        buttonGroup.add(othersRadioButton2);</span>
+
+<span class="nc" id="L351">        othersRadioButton3 = new JRadioButton(&quot;删除源目录下所有文件及子目录&quot;);</span>
+<span class="nc" id="L352">        secondLevelPanel.add(othersRadioButton3);</span>
+<span class="nc" id="L353">        buttonGroup.add(othersRadioButton3);</span>
+<span class="nc" id="L354">    }</span>
+
+    private void createOperationPanel() {
+<span class="nc" id="L357">        operationPanel = new JPanel();</span>
+<span class="nc" id="L358">        operationPanel.setBorder(BorderFactory.createTitledBorder(&quot;6. 操作&quot;));</span>
+<span class="nc" id="L359">        operationPanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L361">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L362">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L363">        operationPanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L365">        JButton button = new JButton(&quot;开始&quot;);</span>
+<span class="nc" id="L366">        button.addMouseListener(new StartButtonMouseAdapter());</span>
+<span class="nc" id="L367">        secondLevelPanel.add(button);</span>
+<span class="nc" id="L368">        secondLevelPanel.add(Box.createHorizontalGlue());</span>
+<span class="nc" id="L369">    }</span>
+
+    private void createStatusPanel() {
+<span class="nc" id="L372">        statusPanel = new JPanel();</span>
+<span class="nc" id="L373">        statusPanel.setBorder(BorderFactory.createTitledBorder(&quot;正在处理&quot;));</span>
+<span class="nc" id="L374">        statusPanel.setLayout(new BorderLayout());</span>
+
+<span class="nc" id="L376">        JPanel secondLevelPanel = new JPanel();</span>
+<span class="nc" id="L377">        secondLevelPanel.setLayout(new BoxLayout(secondLevelPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L378">        statusPanel.add(secondLevelPanel);</span>
+
+<span class="nc" id="L380">        currentFileTextField = new JTextField();</span>
+<span class="nc" id="L381">        secondLevelPanel.add(currentFileTextField);</span>
+<span class="nc" id="L382">    }</span>
+
+<span class="nc" id="L384">    private final class StartButtonMouseAdapter extends MouseAdapter {</span>
+        @Override
+        public void mousePressed(MouseEvent e) {
+<span class="nc" id="L387">            super.mousePressed(e);</span>
+<span class="nc" id="L388">            String sourceString = sourceTextField.getText();</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">            if (StringUtils.isEmpty(sourceString)) {</span>
+<span class="nc" id="L390">                JOptionPane.showMessageDialog(BatchRenamePanel.this, &quot;sourceString is empty&quot;, &quot;ERROR&quot;,</span>
+                        JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L392">                return;</span>
+            }
+<span class="nc" id="L394">            File sourceFile = new File(sourceString);</span>
+<span class="nc bnc" id="L395" title="All 4 branches missed.">            if (!sourceFile.exists() || !sourceFile.isDirectory()) {</span>
+<span class="nc" id="L396">                JOptionPane.showMessageDialog(BatchRenamePanel.this, &quot;sourceFile does not exist or not directory&quot;, &quot;ERROR&quot;,</span>
+                        JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L398">                return;</span>
+            }
+<span class="nc" id="L400">            String[] extensions = null;</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (StringUtils.isNotEmpty(suffixTextField.getText())) {</span>
+<span class="nc" id="L402">                extensions = suffixTextField.getText().split(&quot;,&quot;);</span>
+            }
+<span class="nc" id="L404">            Collection&lt;File&gt; fileCollection = FileUtils.listFiles(sourceFile, extensions, recursiveCheckBox.isSelected());</span>
+<span class="nc" id="L405">            Set&lt;File&gt; fileSet = new TreeSet&lt;&gt;(fileCollection);</span>
+<span class="nc bnc" id="L406" title="All 2 branches missed.">            if (fileSet.isEmpty()) {</span>
+<span class="nc" id="L407">                JOptionPane.showMessageDialog(BatchRenamePanel.this, &quot;fileSet is empty&quot;, &quot;ERROR&quot;,</span>
+                        JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L409">                return;</span>
+            }
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            for (File file : fileSet) {</span>
+<span class="nc" id="L412">                renameSingleFile(file);</span>
+                try {
+<span class="nc" id="L414">                    String path = file.getCanonicalPath();</span>
+<span class="nc" id="L415">                    currentFileTextField.setText(path);</span>
+<span class="nc" id="L416">                    logger.info(&quot;current: &quot; + path);</span>
+<span class="nc" id="L417">                } catch (IOException ex) {</span>
+<span class="nc" id="L418">                    logger.error(&quot;getCanonicalPath failed: IOException&quot;);</span>
+<span class="nc" id="L419">                }</span>
+<span class="nc" id="L420">            }</span>
+<span class="nc" id="L421">        }</span>
+    }
+
+    private void renameSingleFile(File file) {
+<span class="nc" id="L425">        String sourceFile = FilenameUtils.normalizeNoEndSeparator(file.getAbsolutePath());</span>
+<span class="nc" id="L426">        String sourceFileName = FilenameUtils.getName(sourceFile);</span>
+<span class="nc" id="L427">        String targetFileName = sourceFileName;</span>
+<span class="nc" id="L428">        String sourceDir = FilenameUtils.normalizeNoEndSeparator(sourceTextField.getText());</span>
+<span class="nc" id="L429">        String targetDir = FilenameUtils.normalizeNoEndSeparator(targetTextField.getText());</span>
+<span class="nc" id="L430">        String middleStr = StringUtils.substringBetween(sourceFile, sourceDir, sourceFileName);</span>
+<span class="nc bnc" id="L431" title="All 2 branches missed.">        if (ruleRadioButton1.isSelected()) {</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">        } else if (ruleRadioButton2.isSelected()) {</span>
+
+<span class="nc bnc" id="L434" title="All 2 branches missed.">        } else if (ruleRadioButton3.isSelected()) {</span>
+
+<span class="nc bnc" id="L436" title="All 2 branches missed.">        } else if (ruleRadioButton4.isSelected()) {</span>
+
+<span class="nc bnc" id="L438" title="All 2 branches missed.">        } else if (ruleRadioButton5.isSelected()) {</span>
+<span class="nc bnc" id="L439" title="All 2 branches missed.">        } else if (ruleRadioButton6.isSelected()) {</span>
+<span class="nc" id="L440">            targetFileName = StringUtils.replace(sourceFileName, textField61.getText(), textField62.getText());</span>
+        } else {
+<span class="nc" id="L442">            logger.error(&quot;ruleRadioButton select status error&quot;);</span>
+<span class="nc" id="L443">            return;</span>
+        }
+<span class="nc" id="L445">        String targetFile = null;</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">        if (hierarchyRadioButton1.isSelected()) {</span>
+<span class="nc" id="L447">            targetFile = targetDir + File.separatorChar + targetFileName;</span>
+<span class="nc bnc" id="L448" title="All 2 branches missed.">        } else if (hierarchyRadioButton2.isSelected()) {</span>
+<span class="nc" id="L449">            targetFile = targetDir + File.separatorChar + middleStr + targetFileName;</span>
+        } else {
+<span class="nc" id="L451">            logger.error(&quot;hierarchyRadioButton select status error&quot;);</span>
+<span class="nc" id="L452">            return;</span>
+        }
+        try {
+<span class="nc" id="L455">            FileUtils.copyFile(new File(sourceFile), new File(targetFile));</span>
+<span class="nc" id="L456">        } catch (IOException e) {</span>
+<span class="nc" id="L457">            logger.error(&quot;copy file failed: IOException. current: &quot; + sourceFile);</span>
+<span class="nc" id="L458">        }</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">        if (othersRadioButton1.isSelected()) {</span>
+
+<span class="nc bnc" id="L461" title="All 2 branches missed.">        } else if (othersRadioButton2.isSelected()) {</span>
+<span class="nc" id="L462">            logger.info(&quot;delete: &quot; + sourceFile);</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">        } else if (othersRadioButton3.isSelected()) {</span>
+<span class="nc" id="L464">            logger.info(&quot;delete: &quot; + sourceFile);</span>
+        } else {
+<span class="nc" id="L466">            logger.error(&quot;othersRadioButton select status error&quot;);</span>
+<span class="nc" id="L467">            return;</span>
+        }
+<span class="nc" id="L469">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

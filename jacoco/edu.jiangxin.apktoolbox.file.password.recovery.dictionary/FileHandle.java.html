@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileHandle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.file.password.recovery.dictionary</a> &gt; <span class="el_source">FileHandle.java</span></div><h1>FileHandle.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.file.password.recovery.dictionary;
+
+import edu.jiangxin.apktoolbox.file.password.recovery.RecoveryPanel;
+import edu.jiangxin.apktoolbox.file.password.recovery.checker.FileChecker;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class FileHandle {
+
+<span class="nc" id="L13">    private static Logger logger = LogManager.getLogger(FileHandle.class);</span>
+
+    private AtomicBoolean success;
+<span class="nc" id="L16">    private boolean stop = false;</span>
+
+    RecoveryPanel recoveryPanel;
+    private FileChecker fileChecker;
+
+<span class="nc" id="L21">    public FileHandle(FileChecker fileChecker, AtomicBoolean success, RecoveryPanel recoveryPanel) {</span>
+<span class="nc" id="L22">        this.fileChecker = fileChecker;</span>
+<span class="nc" id="L23">        this.success = success;</span>
+<span class="nc" id="L24">        this.recoveryPanel = recoveryPanel;</span>
+<span class="nc" id="L25">    }</span>
+
+    public void stop() {
+<span class="nc" id="L28">        this.stop = true;</span>
+<span class="nc" id="L29">    }</span>
+
+    public AtomicBoolean getSuccess() {
+<span class="nc" id="L32">        return this.success;</span>
+    }
+
+    public void init() {
+<span class="nc" id="L36">        recoveryPanel.setIsRecovering(false);</span>
+<span class="nc" id="L37">    }</span>
+
+    public void handle(String line, long currentLineCount, BigFileReader bigFileReader) {
+<span class="nc bnc" id="L40" title="All 4 branches missed.">        if (success.compareAndSet(true, true) || stop) {</span>
+<span class="nc" id="L41">            return;</span>
+        }
+<span class="nc" id="L43">        recoveryPanel.setProgressBarValue(Math.toIntExact(currentLineCount));</span>
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (fileChecker.checkPassword(line) ) {</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (success.compareAndSet(false, true)) {</span>
+<span class="nc" id="L47">                logger.info(&quot;find password: &quot; + line);</span>
+<span class="nc" id="L48">                recoveryPanel.setIsRecovering(false);</span>
+<span class="nc" id="L49">                bigFileReader.shutdown();</span>
+<span class="nc" id="L50">                JOptionPane.showMessageDialog(recoveryPanel, &quot;Password[&quot; + line + &quot;]&quot;);</span>
+<span class="nc" id="L51">                recoveryPanel.setProgressBarValue(0);</span>
+<span class="nc" id="L52">                return;</span>
+            }
+        } else {
+<span class="nc bnc" id="L55" title="All 4 branches missed.">            if (!success.compareAndSet(true, true) &amp;&amp; !stop) {</span>
+<span class="nc" id="L56">                logger.info(&quot;try password[&quot; + line + &quot;] failed&quot;);</span>
+            }
+        }
+<span class="nc" id="L59">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

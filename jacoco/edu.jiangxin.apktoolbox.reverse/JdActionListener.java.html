@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdActionListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.reverse</a> &gt; <span class="el_source">JdActionListener.java</span></div><h1>JdActionListener.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.reverse;
+
+import edu.jiangxin.apktoolbox.utils.Constants;
+import edu.jiangxin.apktoolbox.utils.Utils;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+/**
+ * @author jiangxin
+ * @author 2018-09-30
+ *
+ */
+public class JdActionListener implements ActionListener {
+
+<span class="nc" id="L23">    private static final Logger logger = LogManager.getLogger(JdActionListener.class);</span>
+
+    private Configuration conf;
+
+<span class="nc" id="L27">    public JdActionListener() {</span>
+<span class="nc" id="L28">        conf = Utils.getConfiguration();;</span>
+<span class="nc" id="L29">    }</span>
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L33">        String toolPath = conf.getString(Constants.JD_GUI_PATH_KEY);</span>
+<span class="nc" id="L34">        File toolFile = null;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (!StringUtils.isEmpty(toolPath)) {</span>
+<span class="nc" id="L36">            toolFile = new File(toolPath);</span>
+        }
+<span class="nc bnc" id="L38" title="All 8 branches missed.">        if (StringUtils.isEmpty(toolPath) || toolFile == null || !toolFile.exists() || !toolFile.isFile()) {</span>
+<span class="nc" id="L39">            Toolkit.getDefaultToolkit().beep();</span>
+<span class="nc" id="L40">            JOptionPane.showMessageDialog(null, &quot;Need Configuration&quot;, &quot;ERROR&quot;,</span>
+                    JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L42">            return;</span>
+        }
+<span class="nc" id="L44">        final String jarPath = conf.getString(Constants.JD_GUI_PATH_KEY);</span>
+<span class="nc" id="L45">        String cmd = &quot;java -Duser.language=en -Dfile.encoding=UTF8 -jar &quot; + jarPath;</span>
+<span class="nc" id="L46">        Utils.unBlockedExecutor(cmd);</span>
+<span class="nc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

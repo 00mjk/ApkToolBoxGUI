@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CheckDigestPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.file.checksum</a> &gt; <span class="el_source">CheckDigestPanel.java</span></div><h1>CheckDigestPanel.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.file.checksum;
+
+import edu.jiangxin.apktoolbox.swing.extend.EasyPanel;
+import edu.jiangxin.apktoolbox.utils.Constants;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Vector;
+
+public class CheckDigestPanel extends EasyPanel {
+    private static final long serialVersionUID = 63924900336217723L;
+
+    private JPanel fileNamePanel;
+
+    private JTextField fileNameTextField;
+    private JButton fileNameButton;
+
+    private JTextArea fileSums;
+    private JScrollPane fileSumScrollPanel;
+
+    private JTextArea inputSums;
+    private JScrollPane inputSumsScroll;
+
+    private JPanel operationPanel;
+
+    private JButton compareButton;
+
+    private JTextField compareResult;
+
+    private JComboBox&lt;Hash&gt; digestTypeComboBox;
+<span class="nc" id="L37">    private final String calculating = &quot;Calculating...&quot;;</span>
+
+    private static File selectedFile;
+    private static Hash selectedHash;
+    private static String hashResult;
+
+    public CheckDigestPanel() {
+<span class="nc" id="L44">        super();</span>
+<span class="nc" id="L45">        initUI();</span>
+<span class="nc" id="L46">    }</span>
+
+    private void initUI() {
+<span class="nc" id="L49">        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);</span>
+<span class="nc" id="L50">        setLayout(boxLayout);</span>
+
+<span class="nc" id="L52">        createFileNamePanel();</span>
+<span class="nc" id="L53">        add(fileNamePanel);</span>
+
+<span class="nc" id="L55">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L57">        createFileSumScrollPanel();</span>
+<span class="nc" id="L58">        add(fileSumScrollPanel);</span>
+
+<span class="nc" id="L60">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L62">        createInputSumScrollPanel();</span>
+<span class="nc" id="L63">        add(inputSumsScroll);</span>
+
+<span class="nc" id="L65">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L67">        createOperationPanel();</span>
+<span class="nc" id="L68">        add(operationPanel);</span>
+<span class="nc" id="L69">    }</span>
+
+    private void createFileNamePanel() {
+<span class="nc" id="L72">        fileNamePanel = new JPanel();</span>
+
+<span class="nc" id="L74">        fileNameTextField = new JTextField();</span>
+
+<span class="nc" id="L76">        fileNameButton = new JButton(&quot;Choose File&quot;);</span>
+<span class="nc" id="L77">        fileNameButton.setFocusPainted(false);</span>
+<span class="nc" id="L78">        fileNameButton.addActionListener(arg0 -&gt; {</span>
+
+<span class="nc" id="L80">            JFileChooser openFile = new JFileChooser();</span>
+<span class="nc" id="L81">            openFile.setCurrentDirectory(new File(System.getProperty(&quot;user.dir&quot;)));</span>
+<span class="nc" id="L82">            openFile.setPreferredSize(new Dimension(400, 300));</span>
+
+<span class="nc" id="L84">            int fileSelect = openFile.showSaveDialog(null);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (fileSelect == JFileChooser.APPROVE_OPTION) {</span>
+<span class="nc" id="L86">                selectedFile = null;</span>
+
+<span class="nc" id="L88">                Thread fileThread = (new Thread(() -&gt; {</span>
+<span class="nc" id="L89">                    fileNameButton.setEnabled(false);</span>
+<span class="nc" id="L90">                    selectedFile = openFile.getSelectedFile();</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (selectedFile != null) {</span>
+<span class="nc" id="L93">                        fileNameTextField.setText(selectedFile.getName());</span>
+<span class="nc" id="L94">                        selectedHash = null;</span>
+<span class="nc" id="L95">                        selectedHash = (Hash) digestTypeComboBox.getSelectedItem();</span>
+<span class="nc" id="L96">                        calculate();</span>
+                    }
+<span class="nc" id="L98">                    fileNameButton.setEnabled(true);</span>
+<span class="nc" id="L99">                }));</span>
+<span class="nc" id="L100">                fileThread.start();</span>
+
+<span class="nc" id="L102">                fileSums.setText(calculating);</span>
+            }
+<span class="nc" id="L104">        });</span>
+
+<span class="nc" id="L106">        fileNamePanel.setLayout(new BoxLayout(fileNamePanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L107">        fileNamePanel.add(fileNameTextField);</span>
+<span class="nc" id="L108">        fileNamePanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L109">        fileNamePanel.add(fileNameButton);</span>
+<span class="nc" id="L110">    }</span>
+
+    private void createFileSumScrollPanel() {
+<span class="nc" id="L113">        fileSums = new JTextArea(5, 4);</span>
+<span class="nc" id="L114">        fileSums.setLineWrap(true);</span>
+<span class="nc" id="L115">        fileSums.setText(&quot;file not selected&quot;);</span>
+<span class="nc" id="L116">        fileSums.setEditable(false);</span>
+<span class="nc" id="L117">        fileSumScrollPanel = new JScrollPane(fileSums);</span>
+<span class="nc" id="L118">    }</span>
+
+    private void createInputSumScrollPanel() {
+<span class="nc" id="L121">        inputSums = new JTextArea(5, 4);</span>
+<span class="nc" id="L122">        inputSums.setLineWrap(true);</span>
+<span class="nc" id="L123">        inputSums.setText(&quot;input sums&quot;);</span>
+<span class="nc" id="L124">        inputSumsScroll = new JScrollPane(inputSums);</span>
+<span class="nc" id="L125">    }</span>
+
+    private void createOperationPanel() {
+<span class="nc" id="L128">        operationPanel = new JPanel();</span>
+
+<span class="nc" id="L130">        compareButton = new JButton(&quot;Compare&quot;);</span>
+<span class="nc" id="L131">        compareButton.setFocusPainted(false);</span>
+<span class="nc" id="L132">        compareButton.addActionListener(arg0 -&gt; {</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            if (!fileSums.getText().equals(calculating)) {</span>
+<span class="nc bnc" id="L135" title="All 6 branches missed.">                if (selectedHash != null &amp;&amp; selectedFile != null &amp;&amp; inputSums.getText() != null</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                        &amp;&amp; !inputSums.getText().equals(&quot;&quot;)) {</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                    if (fileSums.getText().equals(inputSums.getText())) {</span>
+<span class="nc" id="L139">                        compareResult.setText(&quot;match :)&quot;);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                    } else if (fileSums.getText().toLowerCase().equals(inputSums.getText().toLowerCase())) {</span>
+<span class="nc" id="L141">                        compareResult.setText(&quot;match :/&quot;);</span>
+<span class="nc" id="L142">                        JOptionPane.showMessageDialog(null, &quot;Strings match but case insensitive :/&quot;, &quot;:/&quot;,</span>
+                                JOptionPane.WARNING_MESSAGE);
+                    } else {
+<span class="nc" id="L145">                        compareResult.setText(&quot;don't match :(&quot;);</span>
+                    }
+
+<span class="nc" id="L148">                    return;</span>
+                }
+            }
+
+<span class="nc" id="L152">            JOptionPane.showMessageDialog(null, &quot;Something not right :(&quot;, &quot;:(&quot;, JOptionPane.ERROR_MESSAGE);</span>
+<span class="nc" id="L153">        });</span>
+
+<span class="nc" id="L155">        digestTypeComboBox = new JComboBox&lt;&gt;(new Vector&lt;&gt;(Arrays.asList(Hash.values())));</span>
+<span class="nc" id="L156">        digestTypeComboBox.addActionListener(e -&gt; {</span>
+<span class="nc" id="L157">            Hash selectItem = (Hash) digestTypeComboBox.getSelectedItem();</span>
+
+<span class="nc bnc" id="L159" title="All 4 branches missed.">            if (selectedHash == null || (selectedHash.getId() != selectItem.getId())) {</span>
+<span class="nc" id="L160">                selectedHash = selectItem;</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                if (selectedFile != null) {</span>
+<span class="nc" id="L162">                    Thread calculateThread = (new Thread(() -&gt; {</span>
+<span class="nc" id="L163">                        fileNameButton.setEnabled(false);</span>
+<span class="nc" id="L164">                        compareResult.setText(&quot;&quot;);</span>
+<span class="nc" id="L165">                        calculate();</span>
+<span class="nc" id="L166">                        fileNameButton.setEnabled(true);</span>
+<span class="nc" id="L167">                    }));</span>
+<span class="nc" id="L168">                    calculateThread.start();</span>
+<span class="nc" id="L169">                    fileSums.setText(calculating);</span>
+                }
+            }
+
+<span class="nc" id="L173">        });</span>
+
+<span class="nc" id="L175">        compareResult = new JTextField(&quot;&quot;);</span>
+<span class="nc" id="L176">        compareResult.setEditable(false);</span>
+<span class="nc" id="L177">        compareResult.setBorder(null);</span>
+
+<span class="nc" id="L179">        operationPanel.setLayout(new BoxLayout(operationPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L180">        operationPanel.add(compareButton);</span>
+<span class="nc" id="L181">        operationPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L182">        operationPanel.add(digestTypeComboBox);</span>
+<span class="nc" id="L183">        operationPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L184">        operationPanel.add(compareResult);</span>
+<span class="nc" id="L185">    }</span>
+
+    private void calculate() {
+<span class="nc" id="L188">        hashResult = calculate(selectedHash, selectedFile);</span>
+<span class="nc" id="L189">        fileSums.setText(hashResult);</span>
+<span class="nc" id="L190">    }</span>
+
+    private String calculate(final Hash selectedHash, final File file) {
+<span class="nc" id="L193">        String result = &quot;&quot;;</span>
+<span class="nc" id="L194">        try (FileInputStream fis = new FileInputStream(file)) {</span>
+<span class="nc bnc" id="L195" title="All 6 branches missed.">            switch (selectedHash) {</span>
+                case MD5: {
+<span class="nc" id="L197">                    result = DigestUtils.md5Hex(fis);</span>
+<span class="nc" id="L198">                    break;</span>
+                }
+                case Sha1: {
+<span class="nc" id="L201">                    result = DigestUtils.sha1Hex(fis);</span>
+<span class="nc" id="L202">                    break;</span>
+                }
+                case Sha256: {
+<span class="nc" id="L205">                    result = DigestUtils.sha256Hex(fis);</span>
+<span class="nc" id="L206">                    break;</span>
+                }
+                case Sha384: {
+<span class="nc" id="L209">                    result = DigestUtils.sha384Hex(fis);</span>
+<span class="nc" id="L210">                    break;</span>
+                }
+                case Sha512: {
+<span class="nc" id="L213">                    result = DigestUtils.sha512Hex(fis);</span>
+<span class="nc" id="L214">                    break;</span>
+                }
+                default: {
+<span class="nc" id="L217">                    result = &quot;return of the jedi&quot;;</span>
+                    break;
+                }
+            }
+<span class="nc" id="L221">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L222">            logger.error(&quot;calculate, FileNotFoundException&quot;);</span>
+<span class="nc" id="L223">        } catch (IOException e) {</span>
+<span class="nc" id="L224">            logger.error(&quot;calculate, IOException&quot;);</span>
+<span class="nc" id="L225">        }</span>
+<span class="nc" id="L226">        return result;</span>
+    }
+
+<span class="nc" id="L229">    enum Hash {</span>
+<span class="nc" id="L230">        MD5(1, &quot;MD5&quot;), Sha1(2, &quot;Sha1&quot;), Sha256(3, &quot;Sha256&quot;), Sha384(4, &quot;Sha384&quot;), Sha512(5, &quot;Sha512&quot;);</span>
+
+        private int id;
+        private String name;
+
+<span class="nc" id="L235">        Hash(int id, String name) {</span>
+<span class="nc" id="L236">            this.id = id;</span>
+<span class="nc" id="L237">            this.name = name;</span>
+<span class="nc" id="L238">        }</span>
+
+        public int getId() {
+<span class="nc" id="L241">            return id;</span>
+        }
+
+        public String getName() {
+<span class="nc" id="L245">            return name;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

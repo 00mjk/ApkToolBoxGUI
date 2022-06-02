@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AxmlPrinterPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.reverse</a> &gt; <span class="el_source">AxmlPrinterPanel.java</span></div><h1>AxmlPrinterPanel.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.reverse;
+
+import edu.jiangxin.apktoolbox.swing.extend.DirectorySelectButtonMouseAdapter;
+import edu.jiangxin.apktoolbox.swing.extend.EasyPanel;
+import edu.jiangxin.apktoolbox.utils.Constants;
+import edu.jiangxin.apktoolbox.utils.ProcessLogOutputStream;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Level;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+/**
+ * @author jiangxin
+ * @author 2019-04-12
+ *
+ */
+public class AxmlPrinterPanel extends EasyPanel {
+    private static final long serialVersionUID = 1L;
+
+    private JPanel srcPanel;
+
+    private JTextField srcTextField;
+
+    private JButton srcButton;
+
+    private JPanel targetPanel;
+
+    private JTextField targetTextField;
+
+    private JButton targetButton;
+
+    private JPanel operationPanel;
+
+    private JButton getFileButton;
+
+    public AxmlPrinterPanel() throws HeadlessException {
+<span class="nc" id="L48">        super();</span>
+<span class="nc" id="L49">        initUI();</span>
+<span class="nc" id="L50">    }</span>
+
+    private void initUI() {
+<span class="nc" id="L53">        String toolPath = conf.getString(Constants.AXMLPRINTER_PATH_KEY);</span>
+<span class="nc" id="L54">        File toolFile = null;</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (!StringUtils.isEmpty(toolPath)) {</span>
+<span class="nc" id="L56">            toolFile = new File(toolPath);</span>
+        }
+<span class="nc bnc" id="L58" title="All 8 branches missed.">        if (StringUtils.isEmpty(toolPath) || toolFile == null || !toolFile.exists() || !toolFile.isFile()) {</span>
+<span class="nc" id="L59">            Toolkit.getDefaultToolkit().beep();</span>
+<span class="nc" id="L60">            JOptionPane.showMessageDialog(this, &quot;Need Configuration&quot;, &quot;ERROR&quot;,</span>
+                    JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L62">            return;</span>
+        }
+
+<span class="nc" id="L65">        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);</span>
+<span class="nc" id="L66">        setLayout(boxLayout);</span>
+
+<span class="nc" id="L68">        createSrcPanel();</span>
+<span class="nc" id="L69">        add(srcPanel);</span>
+<span class="nc" id="L70">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L72">        createTargetPanel();</span>
+<span class="nc" id="L73">        add(targetPanel);</span>
+<span class="nc" id="L74">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L76">        createOperationPanel();</span>
+<span class="nc" id="L77">        add(operationPanel);</span>
+<span class="nc" id="L78">    }</span>
+
+    private void createOperationPanel() {
+<span class="nc" id="L81">        operationPanel = new JPanel();</span>
+<span class="nc" id="L82">        operationPanel.setLayout(new BoxLayout(operationPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L83">        getFileButton = new JButton(&quot;Get File&quot;);</span>
+<span class="nc" id="L84">        getFileButton.addMouseListener(new GetFileButtonMouseAdapter());</span>
+
+<span class="nc" id="L86">        operationPanel.add(getFileButton);</span>
+<span class="nc" id="L87">    }</span>
+
+    private void createTargetPanel() {
+<span class="nc" id="L90">        targetPanel = new JPanel();</span>
+<span class="nc" id="L91">        targetPanel.setLayout(new BoxLayout(targetPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L92">        targetTextField = new JTextField();</span>
+<span class="nc" id="L93">        targetTextField.setText(conf.getString(&quot;axmlprinter.target.dir&quot;));</span>
+
+<span class="nc" id="L95">        targetButton = new JButton(&quot;Save Dir&quot;);</span>
+<span class="nc" id="L96">        targetButton.addMouseListener(new DirectorySelectButtonMouseAdapter(&quot;Save To&quot;, targetTextField));</span>
+
+<span class="nc" id="L98">        targetPanel.add(targetTextField);</span>
+<span class="nc" id="L99">        targetPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L100">        targetPanel.add(targetButton);</span>
+<span class="nc" id="L101">    }</span>
+
+    private void createSrcPanel() {
+<span class="nc" id="L104">        srcPanel = new JPanel();</span>
+<span class="nc" id="L105">        srcPanel.setLayout(new BoxLayout(srcPanel, BoxLayout.X_AXIS));</span>
+<span class="nc" id="L106">        srcTextField = new JTextField();</span>
+<span class="nc" id="L107">        srcTextField.setText(conf.getString(&quot;axmlprinter.src.file&quot;));</span>
+
+<span class="nc" id="L109">        srcButton = new JButton(&quot;Source File&quot;);</span>
+<span class="nc" id="L110">        srcButton.addMouseListener(new SrcButtonMouseAdapter());</span>
+
+<span class="nc" id="L112">        srcPanel.add(srcTextField);</span>
+<span class="nc" id="L113">        srcPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L114">        srcPanel.add(srcButton);</span>
+<span class="nc" id="L115">    }</span>
+
+<span class="nc" id="L117">    private final class SrcButtonMouseAdapter extends MouseAdapter {</span>
+        @Override
+        public void mousePressed(MouseEvent e) {
+<span class="nc" id="L120">            super.mousePressed(e);</span>
+<span class="nc" id="L121">            JFileChooser jfc = new JFileChooser();</span>
+<span class="nc" id="L122">            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);</span>
+<span class="nc" id="L123">            jfc.setDialogTitle(&quot;select a file&quot;);</span>
+<span class="nc" id="L124">            int ret = jfc.showDialog(new JLabel(), null);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            switch (ret) {</span>
+                case JFileChooser.APPROVE_OPTION:
+<span class="nc" id="L127">                    File file = jfc.getSelectedFile();</span>
+<span class="nc" id="L128">                    srcTextField.setText(file.getAbsolutePath());</span>
+<span class="nc" id="L129">                    break;</span>
+                default:
+                    break;
+            }
+
+<span class="nc" id="L134">        }</span>
+    }
+
+<span class="nc" id="L137">    private final class GetFileButtonMouseAdapter extends MouseAdapter {</span>
+        @Override
+        public void mousePressed(MouseEvent e) {
+<span class="nc" id="L140">            super.mousePressed(e);</span>
+<span class="nc" id="L141">            File srcFile = new File(srcTextField.getText());</span>
+<span class="nc bnc" id="L142" title="All 4 branches missed.">            if (!srcFile.exists() || !srcFile.isFile()) {</span>
+<span class="nc" id="L143">                logger.error(&quot;srcFile is invalid&quot;);</span>
+<span class="nc" id="L144">                Toolkit.getDefaultToolkit().beep();</span>
+<span class="nc" id="L145">                JOptionPane.showMessageDialog(AxmlPrinterPanel.this, &quot;Source file is invalid&quot;, &quot;ERROR&quot;,</span>
+                        JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L147">                srcTextField.requestFocus();</span>
+<span class="nc" id="L148">                return;</span>
+            }
+            String srcPath;
+            try {
+<span class="nc" id="L152">                srcPath = srcFile.getCanonicalPath();</span>
+<span class="nc" id="L153">            } catch (IOException e2) {</span>
+<span class="nc" id="L154">                logger.error(&quot;getCanonicalPath fail&quot;);</span>
+<span class="nc" id="L155">                return;</span>
+<span class="nc" id="L156">            }</span>
+<span class="nc" id="L157">            conf.setProperty(&quot;axmlprinter.src.file&quot;, srcPath);</span>
+<span class="nc" id="L158">            File targetFile = new File(targetTextField.getText());</span>
+<span class="nc bnc" id="L159" title="All 4 branches missed.">            if (!targetFile.exists() || !targetFile.isDirectory()) {</span>
+<span class="nc" id="L160">                logger.error(&quot;targetFile is invalid&quot;);</span>
+<span class="nc" id="L161">                Toolkit.getDefaultToolkit().beep();</span>
+<span class="nc" id="L162">                JOptionPane.showMessageDialog(AxmlPrinterPanel.this, &quot;Target dir is invalid&quot;, &quot;ERROR&quot;,</span>
+                        JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L164">                targetTextField.requestFocus();</span>
+<span class="nc" id="L165">                return;</span>
+            }
+            String targetPath;
+            try {
+<span class="nc" id="L169">                targetPath = targetFile.getCanonicalPath();</span>
+<span class="nc" id="L170">            } catch (IOException e2) {</span>
+<span class="nc" id="L171">                logger.error(&quot;getCanonicalPath fail&quot;);</span>
+<span class="nc" id="L172">                return;</span>
+<span class="nc" id="L173">            }</span>
+<span class="nc" id="L174">            conf.setProperty(&quot;axmlprinter.target.dir&quot;, targetPath);</span>
+<span class="nc" id="L175">            try (ZipFile zip = new ZipFile(srcFile)) {</span>
+<span class="nc" id="L176">                Enumeration&lt;?&gt; entries = zip.entries();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                while (entries.hasMoreElements()) {</span>
+<span class="nc" id="L178">                    ZipEntry entry = (ZipEntry) entries.nextElement();</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                    if (&quot;AndroidManifest.xml&quot;.equals(entry.getName())) {</span>
+<span class="nc" id="L180">                        try (InputStream inputStream = zip.getInputStream(entry);</span>
+<span class="nc" id="L181">                             OutputStream outputSteam = new FileOutputStream(new File(targetPath, &quot;AndroidManifest.xml.orig&quot;))) {</span>
+<span class="nc" id="L182">                            IOUtils.copy(inputStream,outputSteam);</span>
+<span class="nc" id="L183">                        } catch (IOException e2) {</span>
+<span class="nc" id="L184">                            logger.error(&quot;axmlprinter fail&quot;, e2);</span>
+<span class="nc" id="L185">                        }</span>
+<span class="nc" id="L186">                        break;</span>
+                    }
+<span class="nc" id="L188">                }</span>
+
+<span class="nc" id="L190">                StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L191">                sb.append(&quot;java -jar \&quot;-Duser.language=en\&quot; \&quot;-Dfile.encoding=UTF8\&quot;&quot;).append(&quot; \&quot;&quot;)</span>
+<span class="nc" id="L192">                        .append(conf.getString(Constants.AXMLPRINTER_PATH_KEY)).append(&quot;\&quot;&quot;)</span>
+<span class="nc" id="L193">                        .append(&quot; &quot;).append(new File(targetPath, &quot;AndroidManifest.xml.orig&quot;).getCanonicalPath());</span>
+<span class="nc" id="L194">                String cmd = sb.toString();</span>
+<span class="nc" id="L195">                logger.info(cmd);</span>
+<span class="nc" id="L196">                File outputFile = new File(targetFile, &quot;AndroidManifest.xml&quot;);</span>
+<span class="nc" id="L197">                try (FileOutputStream outStream = new FileOutputStream(outputFile);</span>
+<span class="nc" id="L198">                     ProcessLogOutputStream errStream = new ProcessLogOutputStream(logger, Level.ERROR)</span>
+                ) {
+<span class="nc" id="L200">                    CommandLine commandLine = CommandLine.parse(cmd);</span>
+<span class="nc" id="L201">                    DefaultExecutor exec = new DefaultExecutor();</span>
+<span class="nc" id="L202">                    PumpStreamHandler streamHandler = new PumpStreamHandler(outStream, errStream);</span>
+<span class="nc" id="L203">                    exec.setStreamHandler(streamHandler);</span>
+<span class="nc" id="L204">                    int exitValue = exec.execute(commandLine);</span>
+<span class="nc" id="L205">                    logger.info(&quot;exitValue: [&quot; + exitValue + &quot;]&quot;);</span>
+                }
+<span class="nc" id="L207">            } catch (IOException e1) {</span>
+<span class="nc" id="L208">                logger.error(&quot;axmlprinter fail&quot;, e1);</span>
+<span class="nc" id="L209">            }</span>
+<span class="nc" id="L210">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

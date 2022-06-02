@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseConvertPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">APKToolBoxGUI</a> &gt; <a href="index.source.html" class="el_package">edu.jiangxin.apktoolbox.convert.base</a> &gt; <span class="el_source">BaseConvertPanel.java</span></div><h1>BaseConvertPanel.java</h1><pre class="source lang-java linenums">package edu.jiangxin.apktoolbox.convert.base;
+
+import edu.jiangxin.apktoolbox.swing.extend.EasyPanel;
+import edu.jiangxin.apktoolbox.utils.Constants;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class BaseConvertPanel extends EasyPanel {
+    private static final String PROPERTY_KEY = &quot;name&quot;;
+
+    private static final String DECIMAL = &quot;Decimal&quot;;
+
+    private static final String BINARY = &quot;Binary&quot;;
+
+    private static final String OCTAL = &quot;Octal&quot;;
+
+    private static final String HEX = &quot;Hex&quot;;
+
+    private JPanel binPanel;
+
+    private JLabel binLabel;
+
+    private JTextField binTextField;
+
+    private JPanel octPanel;
+
+    private JLabel octLabel;
+
+    private JTextField octTextField;
+
+    private JPanel decPanel;
+
+    private JLabel decLabel;
+
+    private JTextField decTextField;
+
+    private JPanel hexPanel;
+
+    private JLabel hexLabel;
+
+    private JTextField hexTextField;
+
+    private JButton clearBtn;
+
+    private DocumentListener documentListener;
+
+    private boolean isChangedByUser;
+
+    private String strBin, strOct, strDec, strHex;
+
+<span class="nc" id="L56">    public BaseConvertPanel() {</span>
+<span class="nc" id="L57">        BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);</span>
+<span class="nc" id="L58">        setLayout(boxLayout);</span>
+
+<span class="nc" id="L60">        documentListener = new TextFieldDocumentListener();</span>
+
+<span class="nc" id="L62">        strBin = strOct = strDec = strHex = &quot;&quot;;</span>
+<span class="nc" id="L63">        isChangedByUser = true;</span>
+
+<span class="nc" id="L65">        createBinPanel();</span>
+<span class="nc" id="L66">        add(binPanel);</span>
+<span class="nc" id="L67">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L69">        createOctPanel();</span>
+<span class="nc" id="L70">        add(octPanel);</span>
+<span class="nc" id="L71">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L73">        createDecPanel();</span>
+<span class="nc" id="L74">        add(decPanel);</span>
+<span class="nc" id="L75">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L77">        createHexPanel();</span>
+<span class="nc" id="L78">        add(hexPanel);</span>
+<span class="nc" id="L79">        add(Box.createVerticalStrut(Constants.DEFAULT_Y_BORDER));</span>
+
+<span class="nc" id="L81">        clearBtn = new JButton(&quot;Clear&quot;);</span>
+<span class="nc" id="L82">        clearBtn.addActionListener(new ClearButtonActionListener());</span>
+<span class="nc" id="L83">        add(clearBtn);</span>
+<span class="nc" id="L84">    }</span>
+
+    private void createBinPanel() {
+<span class="nc" id="L87">        binPanel = new JPanel();</span>
+<span class="nc" id="L88">        binPanel.setLayout(new BoxLayout(binPanel, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L90">        binLabel = new JLabel(BINARY + &quot;:&quot;);</span>
+
+<span class="nc" id="L92">        binTextField = new JTextField();</span>
+<span class="nc" id="L93">        binTextField.getDocument().addDocumentListener(documentListener);</span>
+<span class="nc" id="L94">        binTextField.getDocument().putProperty(PROPERTY_KEY, BINARY);</span>
+
+<span class="nc" id="L96">        binPanel.add(binLabel);</span>
+<span class="nc" id="L97">        binPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L98">        binPanel.add(binTextField);</span>
+<span class="nc" id="L99">    }</span>
+
+    private void createOctPanel() {
+<span class="nc" id="L102">        octPanel = new JPanel();</span>
+<span class="nc" id="L103">        octPanel.setLayout(new BoxLayout(octPanel, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L105">        octLabel = new JLabel(OCTAL + &quot;:&quot;);</span>
+
+<span class="nc" id="L107">        octTextField = new JTextField();</span>
+<span class="nc" id="L108">        octTextField.getDocument().addDocumentListener(documentListener);</span>
+<span class="nc" id="L109">        octTextField.getDocument().putProperty(PROPERTY_KEY, OCTAL);</span>
+
+<span class="nc" id="L111">        octPanel.add(octLabel);</span>
+<span class="nc" id="L112">        octPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L113">        octPanel.add(octTextField);</span>
+<span class="nc" id="L114">    }</span>
+
+    private void createDecPanel() {
+<span class="nc" id="L117">        decPanel = new JPanel();</span>
+<span class="nc" id="L118">        decPanel.setLayout(new BoxLayout(decPanel, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L120">        decLabel = new JLabel(DECIMAL + &quot;:&quot;);</span>
+
+<span class="nc" id="L122">        decTextField = new JTextField();</span>
+<span class="nc" id="L123">        decTextField.getDocument().addDocumentListener(documentListener);</span>
+<span class="nc" id="L124">        decTextField.getDocument().putProperty(PROPERTY_KEY, DECIMAL);</span>
+
+<span class="nc" id="L126">        decPanel.add(decLabel);</span>
+<span class="nc" id="L127">        decPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L128">        decPanel.add(decTextField);</span>
+<span class="nc" id="L129">    }</span>
+
+    private void createHexPanel() {
+<span class="nc" id="L132">        hexPanel = new JPanel();</span>
+<span class="nc" id="L133">        hexPanel.setLayout(new BoxLayout(hexPanel, BoxLayout.X_AXIS));</span>
+
+<span class="nc" id="L135">        hexLabel = new JLabel(HEX + &quot;:&quot;);</span>
+
+<span class="nc" id="L137">        hexTextField = new JTextField();</span>
+<span class="nc" id="L138">        hexTextField.getDocument().addDocumentListener(documentListener);</span>
+<span class="nc" id="L139">        hexTextField.getDocument().putProperty(PROPERTY_KEY, HEX);</span>
+
+<span class="nc" id="L141">        hexPanel.add(hexLabel);</span>
+<span class="nc" id="L142">        hexPanel.add(Box.createHorizontalStrut(Constants.DEFAULT_X_BORDER));</span>
+<span class="nc" id="L143">        hexPanel.add(hexTextField);</span>
+<span class="nc" id="L144">    }</span>
+
+<span class="nc" id="L146">    class ClearButtonActionListener implements ActionListener {</span>
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+<span class="nc" id="L149">            strBin = strOct = strDec = strHex = &quot;&quot;;</span>
+<span class="nc" id="L150">            isChangedByUser = false;</span>
+<span class="nc" id="L151">            binTextField.setText(strBin);</span>
+<span class="nc" id="L152">            octTextField.setText(strOct);</span>
+<span class="nc" id="L153">            decTextField.setText(strDec);</span>
+<span class="nc" id="L154">            hexTextField.setText(strHex);</span>
+<span class="nc" id="L155">            isChangedByUser = true;</span>
+<span class="nc" id="L156">        }</span>
+    }
+
+<span class="nc" id="L159">    class TextFieldDocumentListener implements DocumentListener {</span>
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L162">        }</span>
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L166">            detect(e);</span>
+<span class="nc" id="L167">        }</span>
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L171">            detect(e);</span>
+<span class="nc" id="L172">        }</span>
+    }
+
+    private void detect(DocumentEvent documentEvent) {
+<span class="nc" id="L176">        Document doc = documentEvent.getDocument();</span>
+<span class="nc" id="L177">        Object propertyObj = doc.getProperty(PROPERTY_KEY);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (propertyObj == null) {</span>
+<span class="nc" id="L179">            logger.warn(&quot;property is null&quot;);</span>
+<span class="nc" id="L180">            return;</span>
+        }
+<span class="nc" id="L182">        String propertyStr = propertyObj.toString();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (propertyStr.equals(BINARY)) {</span>
+<span class="nc" id="L184">            convertMe(BINARY, binTextField.getText());</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        } else if (propertyStr.equals(OCTAL)) {</span>
+<span class="nc" id="L186">            convertMe(OCTAL, octTextField.getText());</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        } else if (propertyStr.equals(DECIMAL)) {</span>
+<span class="nc" id="L188">            convertMe(DECIMAL, decTextField.getText());</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        } else if (propertyStr.equals(HEX)) {</span>
+<span class="nc" id="L190">            convertMe(HEX, hexTextField.getText());</span>
+        } else {
+<span class="nc" id="L192">            logger.warn(&quot;property is invalid&quot;);</span>
+        }
+<span class="nc" id="L194">    }</span>
+
+    public void convertMe(String type, String content) {
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (!isChangedByUser) {</span>
+<span class="nc" id="L198">            return;</span>
+        }
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (content.length() == 0) {</span>
+<span class="nc" id="L201">            content = &quot;0&quot;;</span>
+        }
+<span class="nc" id="L203">        long value = 0;</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (BINARY.equals(type)) {</span>
+            try {
+<span class="nc" id="L206">                value = Long.valueOf(content, 2);</span>
+<span class="nc" id="L207">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L208">                logger.warn(&quot;convert error: NumberFormatException content: &quot; + content);</span>
+<span class="nc" id="L209">                isChangedByUser = false;</span>
+<span class="nc" id="L210">                binTextField.setText(strBin);</span>
+<span class="nc" id="L211">                isChangedByUser = true;</span>
+<span class="nc" id="L212">                return;</span>
+<span class="nc" id="L213">            }</span>
+
+<span class="nc" id="L215">            isChangedByUser = false;</span>
+<span class="nc" id="L216">            octTextField.setText(Long.toOctalString(value));</span>
+<span class="nc" id="L217">            decTextField.setText(Long.toString(value));</span>
+<span class="nc" id="L218">            hexTextField.setText(Long.toHexString(value));</span>
+<span class="nc" id="L219">            isChangedByUser = true;</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        } else if (OCTAL.equals(type)) {</span>
+            try {
+<span class="nc" id="L222">                value = Long.valueOf(content, 8);</span>
+<span class="nc" id="L223">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L224">                logger.warn(&quot;convert error: NumberFormatException content: &quot; + content);</span>
+<span class="nc" id="L225">                isChangedByUser = false;</span>
+<span class="nc" id="L226">                octTextField.setText(strOct);</span>
+<span class="nc" id="L227">                isChangedByUser = true;</span>
+<span class="nc" id="L228">                return;</span>
+<span class="nc" id="L229">            }</span>
+<span class="nc" id="L230">            isChangedByUser = false;</span>
+<span class="nc" id="L231">            binTextField.setText(Long.toBinaryString(value));</span>
+<span class="nc" id="L232">            decTextField.setText(Long.toString(value));</span>
+<span class="nc" id="L233">            hexTextField.setText(Long.toHexString(value));</span>
+<span class="nc" id="L234">            isChangedByUser = true;</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        } else if (DECIMAL.equals(type)) {</span>
+            try {
+<span class="nc" id="L237">                value = Long.valueOf(content, 10);</span>
+<span class="nc" id="L238">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L239">                logger.warn(&quot;convert error: NumberFormatException content: &quot; + content);</span>
+<span class="nc" id="L240">                isChangedByUser = false;</span>
+<span class="nc" id="L241">                decTextField.setText(strDec);</span>
+<span class="nc" id="L242">                isChangedByUser = true;</span>
+<span class="nc" id="L243">                return;</span>
+<span class="nc" id="L244">            }</span>
+<span class="nc" id="L245">            isChangedByUser = false;</span>
+<span class="nc" id="L246">            binTextField.setText(Long.toBinaryString(value));</span>
+<span class="nc" id="L247">            octTextField.setText(Long.toOctalString(value));</span>
+<span class="nc" id="L248">            hexTextField.setText(Long.toHexString(value));</span>
+<span class="nc" id="L249">            isChangedByUser = true;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        } else if (HEX.equals(type)) {</span>
+            try {
+<span class="nc" id="L252">                value = Long.valueOf(content, 16);</span>
+<span class="nc" id="L253">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L254">                logger.warn(&quot;convert error: NumberFormatException content: &quot; + content);</span>
+<span class="nc" id="L255">                isChangedByUser = false;</span>
+<span class="nc" id="L256">                hexTextField.setText(strHex);</span>
+<span class="nc" id="L257">                isChangedByUser = true;</span>
+<span class="nc" id="L258">                return;</span>
+<span class="nc" id="L259">            }</span>
+<span class="nc" id="L260">            isChangedByUser = false;</span>
+<span class="nc" id="L261">            binTextField.setText(Long.toBinaryString(value));</span>
+<span class="nc" id="L262">            octTextField.setText(Long.toOctalString(value));</span>
+<span class="nc" id="L263">            decTextField.setText(Long.toHexString(value));</span>
+<span class="nc" id="L264">            isChangedByUser = true;</span>
+        }
+<span class="nc" id="L266">        strBin = binTextField.getText();</span>
+<span class="nc" id="L267">        strOct = octTextField.getText();</span>
+<span class="nc" id="L268">        strDec = decTextField.getText();</span>
+<span class="nc" id="L269">        strHex = hexTextField.getText();</span>
+<span class="nc" id="L270">        return;</span>
+    }
+
+    private boolean isBinStr(String str) {
+<span class="nc" id="L274">        int len = str.length();</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        for (int i = 0; i &lt; len; i++)</span>
+<span class="nc bnc" id="L276" title="All 4 branches missed.">            if ((str.charAt(i) == '1') || (str.charAt(i) == '0'))</span>
+<span class="nc" id="L277">                ;</span>
+            else
+<span class="nc" id="L279">                return false;</span>
+<span class="nc" id="L280">        return true;</span>
+    }
+
+    private boolean isDecimalStr(String deci) {
+<span class="nc" id="L284">        int len = deci.length();</span>
+        char ch;
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        for (int i = 0; i &lt; len; i++) {</span>
+<span class="nc" id="L287">            ch = deci.charAt(i);</span>
+<span class="nc bnc" id="L288" title="All 4 branches missed.">            if ((ch &gt;= '0') &amp;&amp; (ch &lt;= '9')) ;</span>
+            else
+<span class="nc" id="L290">                return false;</span>
+        }
+<span class="nc" id="L292">        return true;</span>
+    }
+
+    private boolean isOctStr(String octal) {
+<span class="nc" id="L296">        int len = octal.length();</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">        for (int i = 0; i &lt; len; i++)</span>
+<span class="nc bnc" id="L298" title="All 4 branches missed.">            if ((octal.charAt(i) &gt;= '0') &amp;&amp; (octal.charAt(i) &lt;= '7')) ;</span>
+            else
+<span class="nc" id="L300">                return false;</span>
+<span class="nc" id="L301">        return true;</span>
+    }
+
+    private boolean isHexString(String hex) {
+<span class="nc" id="L305">        int len = hex.length();</span>
+        int c;
+<span class="nc bnc" id="L307" title="All 2 branches missed.">        for (int i = 0; i &lt; len; i++) {</span>
+<span class="nc" id="L308">            c = (int) hex.charAt(i);</span>
+<span class="nc bnc" id="L309" title="All 12 branches missed.">            if ((c &gt;= '0' &amp;&amp; c &lt;= '9') || (c &gt;= 'A' &amp;&amp; c &lt;= 'F') || (c &gt;= 'a' &amp;&amp; c &lt;= 'f')) ;</span>
+            else
+<span class="nc" id="L311">                return false;</span>
+        }
+<span class="nc" id="L313">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
